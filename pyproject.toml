@@ -1,0 +1,88 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openmontage-cli"
+version = "0.1.0"
+description = "OpenMontage as a standalone Python CLI — agentic video production from your terminal"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "AGPL-3.0"
+authors = [{ name = "OpenMontage" }]
+keywords = ["video", "ai", "agentic", "pipeline", "cli"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Topic :: Multimedia :: Video",
+]
+dependencies = [
+    "pyyaml>=6.0",
+    "pydantic>=2.0",
+    "jsonschema>=4.20",
+    "python-dotenv>=1.0",
+    "Pillow>=10.0",
+    "numpy>=1.24",
+    "requests>=2.31",
+    "typer>=0.12",
+    # LLM providers
+    "anthropic>=0.18",
+    "openai>=1.0",
+    "google-genai>=1.0.0",
+    # Google Vertex (google TTS + Imagen) + openai client stack
+    "google-auth>=2.0",
+]
+
+[project.optional-dependencies]
+backlot = [
+    "fastapi>=0.110",
+    "uvicorn>=0.29",
+    "watchfiles>=0.21",
+]
+dev = [
+    "pytest>=8.0",
+    "build>=1.0",
+]
+
+[project.scripts]
+openmontage = "openmontage_cli.cli:main"
+openmontage-cli = "openmontage_cli.cli:main"
+
+[tool.setuptools]
+packages = [
+    "openmontage_cli",
+    "openmontage_cli.cli",
+    "openmontage_cli.llm",
+    "openmontage_cli.llm.providers",
+    "openmontage_cli.runner",
+    "openmontage_cli.commands",
+    "openmontage_cli.utils",
+    "tools",
+    "tools.audio",
+    "tools.video",
+    "tools.graphics",
+    "tools.analysis",
+    "tools.enhancement",
+    "tools.avatar",
+    "tools.subtitle",
+    "tools.capture",
+    "tools.character",
+    "tools.publishers",
+    "lib",
+    "lib.providers",
+    "schemas",
+    "schemas.artifacts",
+    "schemas.checkpoints",
+    "schemas.pipelines",
+    "schemas.styles",
+    "schemas.tools",
+    "backlot",
+    "backlot.ui",
+]
+
+[tool.setuptools.package-data]
+openmontage_cli = ["../pipeline_defs/*.yaml", "../styles/*.yaml", "../skills/**/*.md", "../schemas/**/*.json", "../config.yaml", "../remotion-composer/**/*"]
+"*" = ["*.yaml", "*.json", "*.md", "*.html", "*.css", "*.js", "*.ts", "*.tsx", "*.png", "*.svg"]
