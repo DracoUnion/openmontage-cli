@@ -13,7 +13,7 @@ import os
 from pathlib import Path
 from typing import Optional
 
-from openmontage_cli.utils.paths import project_root, ensure_root_in_path
+from openmontage.utils.paths import project_root, ensure_root_in_path
 
 # Re-exported helpers so the rest of the package has a single import point.
 ROOT = project_root()

@@ -11,7 +11,7 @@ import argparse
 import sys
 from typing import Optional
 
-from openmontage_cli.runner import MakeResult, make
+from openmontage.runner import MakeResult, make
 
 
 def _print_result(res: MakeResult) -> None:

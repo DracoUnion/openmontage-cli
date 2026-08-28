@@ -18,7 +18,7 @@ import json
 from pathlib import Path
 from typing import Any, Optional
 
-from openmontage_cli.utils.paths import (
+from openmontage.utils.paths import (
     project_root,
     ensure_root_in_path,
     projects_dir,

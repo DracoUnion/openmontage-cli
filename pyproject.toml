@@ -48,18 +48,18 @@ dev = [
 ]
 
 [project.scripts]
-openmontage = "openmontage_cli.cli:main"
-openmontage-cli = "openmontage_cli.cli:main"
+openmontage = "openmontage.cli:main"
+openmontage-cli = "openmontage.cli:main"
 
 [tool.setuptools]
 packages = [
-    "openmontage_cli",
-    "openmontage_cli.cli",
-    "openmontage_cli.llm",
-    "openmontage_cli.llm.providers",
-    "openmontage_cli.runner",
-    "openmontage_cli.commands",
-    "openmontage_cli.utils",
+    "openmontage",
+    "openmontage.cli",
+    "openmontage.llm",
+    "openmontage.llm.providers",
+    "openmontage.runner",
+    "openmontage.commands",
+    "openmontage.utils",
     "tools",
     "tools.audio",
     "tools.video",
@@ -84,5 +84,5 @@ packages = [
 ]
 
 [tool.setuptools.package-data]
-openmontage_cli = ["../pipeline_defs/*.yaml", "../styles/*.yaml", "../skills/**/*.md", "../schemas/**/*.json", "../config.yaml", "../remotion-composer/**/*"]
+openmontage = ["../pipeline_defs/*.yaml", "../styles/*.yaml", "../skills/**/*.md", "../schemas/**/*.json", "../config.yaml", "../remotion-composer/**/*"]
 "*" = ["*.yaml", "*.json", "*.md", "*.html", "*.css", "*.js", "*.ts", "*.tsx", "*.png", "*.svg"]

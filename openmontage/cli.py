@@ -34,7 +34,7 @@ import sys
 from pathlib import Path
 from typing import Any, Optional
 
-from openmontage_cli import __version__
+from openmontage import __version__
 
 
 def _project_root() -> Path:
@@ -338,7 +338,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     # Import lazily so the read-only commands still work even if an LLM
     # dependency (openai) is missing.
     if args.command in ("make", "plan", "run", "resume"):
-        from openmontage_cli.commands.make_cmd import (
+        from openmontage.commands.make_cmd import (
             cmd_make, cmd_plan, cmd_run, cmd_resume,
         )
         command_map.update({

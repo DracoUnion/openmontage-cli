@@ -1,4 +1,4 @@
-"""Headless tests for the openmontage_cli driver (no API keys, no network).
+"""Headless tests for the openmontage driver (no API keys, no network).
 
 These prove the wiring works: the bridge executes real OpenMontage tools, and
 the orchestrator loop drives a provider through preflight -> tool calls ->
@@ -12,9 +12,9 @@ import os
 
 import pytest
 
-from openmontage_cli import bridge
-from openmontage_cli.gates import GatePolicy, Resolution
-from openmontage_cli.llm.orchestrator import Orchestrator, build_system_prompt
+from openmontage import bridge
+from openmontage.gates import GatePolicy, Resolution
+from openmontage.llm.orchestrator import Orchestrator, build_system_prompt
 
 
 def test_bridge_preflight_returns_menu():
@@ -39,7 +39,7 @@ def test_bridge_tool_names():
 
 def test_tool_defs_have_armatures():
     # every tool callable by the bridge must have a schema usable by a provider
-    from openmontage_cli.llm.providers.openai import build_openai_tools
+    from openmontage.llm.providers.openai import build_openai_tools
     tools = build_openai_tools()
     names = {t["function"]["name"] for t in tools}
     assert names == set(bridge.tool_names())
@@ -166,7 +166,7 @@ def test_build_system_prompt_includes_contract():
 
 def test_runner_requires_api_key_to_be_set(monkeypatch):
     # Simulate no key configured -> runner must fail fast with a clear message.
-    from openmontage_cli import runner, config
+    from openmontage import runner, config
     monkeypatch.setattr(config, "has_api_key", lambda: False)
     res = runner.make("some request")
     assert res.ok is False
@@ -174,7 +174,7 @@ def test_runner_requires_api_key_to_be_set(monkeypatch):
 
 
 def test_runner_parse_duration():
-    from openmontage_cli.runner import parse_duration
+    from openmontage.runner import parse_duration
     assert parse_duration("45s") == 45
     assert parse_duration("60") == 60
     assert parse_duration("90 seconds") == 90

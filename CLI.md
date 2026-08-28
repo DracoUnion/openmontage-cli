@@ -61,7 +61,7 @@ non-interactive, so it applies a policy:
 
 ## How it works
 
-`openmontage_cli/` adds:
+`openmontage/` adds:
 - `bridge.py` — exposes OpenMontage capabilities (preflight, load pipeline /
   skill / playbook, `run_tool` for any registered `BaseTool`, checkpoints,
   artifacts, finalize) as callable operations.
