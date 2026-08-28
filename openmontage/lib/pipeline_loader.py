@@ -15,7 +15,7 @@ import jsonschema
 PIPELINE_DEFS_DIR = Path(__file__).resolve().parents[2] / "pipeline_defs"
 SCHEMA_PATH = (
     Path(__file__).resolve().parents[2]
-    / "schemas"
+    / "openmontage" / "schemas"
     / "pipelines"
     / "pipeline_manifest.schema.json"
 )

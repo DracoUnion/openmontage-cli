@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "OpenMontage as a standalone Python CLI — agentic video production from your terminal"
 readme = "README.md"
 requires-python = ">=3.10"
-license = "AGPL-3.0"
+license = { text = "AGPL-3.0" }
 authors = [{ name = "OpenMontage" }]
 keywords = ["video", "ai", "agentic", "pipeline", "cli"]
 classifiers = [
@@ -54,10 +54,8 @@ openmontage-cli = "openmontage.cli:main"
 [tool.setuptools]
 packages = [
     "openmontage",
-    "openmontage.cli",
     "openmontage.llm",
     "openmontage.llm.providers",
-    "openmontage.runner",
     "openmontage.commands",
     "openmontage.utils",
     "openmontage.tools",
@@ -85,4 +83,6 @@ packages = [
 
 [tool.setuptools.package-data]
 openmontage = ["../pipeline_defs/*.yaml", "../styles/*.yaml", "../skills/**/*.md", "*.yaml", "*.json", "*.md", "tools/**/*.yaml", "tools/**/*.json", "tools/**/*.md", "backlot/ui/*"]
+"openmontage.backlot" = ["ui/*"]
+"openmontage.schemas" = ["**/*.json"]
 "*" = ["*.yaml", "*.json", "*.md", "*.html", "*.css", "*.js", "*.ts", "*.tsx", "*.png", "*.svg"]
