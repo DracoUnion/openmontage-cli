@@ -15,7 +15,7 @@ from pathlib import Path
 
 import pytest
 
-from tools.base_tool import (
+from openmontage.tools.base_tool import (
     BaseTool,
     ExecutionMode,
     ToolRuntime,
@@ -23,7 +23,7 @@ from tools.base_tool import (
     ToolStatus,
     ToolTier,
 )
-from tools.video.hunyuan_cloud_video import HunyuanCloudVideo
+from openmontage.tools.video.hunyuan_cloud_video import HunyuanCloudVideo
 
 
 # ------------------------------------------------------------------
@@ -736,8 +736,8 @@ class TestRegistryDiscovery:
         assert local.runtime == ToolRuntime.LOCAL_GPU
 
     def test_video_selector_routes_to_hunyuan_cloud(self, hunyuan_env, monkeypatch):
-        from tools.base_tool import ToolResult
-        from tools.video.video_selector import VideoSelector
+        from openmontage.tools.base_tool import ToolResult
+        from openmontage.tools.video.video_selector import VideoSelector
 
         tool = HunyuanCloudVideo()
         selector = VideoSelector()

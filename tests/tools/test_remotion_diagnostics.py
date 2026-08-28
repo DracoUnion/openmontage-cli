@@ -16,7 +16,7 @@ import pytest
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.video.video_compose import VideoCompose  # noqa: E402
+from openmontage.tools.video.video_compose import VideoCompose  # noqa: E402
 
 
 @pytest.fixture
@@ -88,7 +88,7 @@ def test_high_level_render_forwards_timeout_to_remotion(tool, tmp_path, monkeypa
 
     def fake_remotion_render(inputs):
         captured.update(inputs)
-        from tools.base_tool import ToolResult
+        from openmontage.tools.base_tool import ToolResult
 
         return ToolResult(success=True, data={}, artifacts=[])
 

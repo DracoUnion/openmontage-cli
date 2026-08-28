@@ -16,10 +16,10 @@ from pathlib import Path
 PROJECT_ROOT = str(Path(__file__).resolve().parent.parent.parent)
 sys.path.insert(0, PROJECT_ROOT)
 
-from lib.env_loader import load_env
+from openmontage.lib.env_loader import load_env
 load_env()
 
-from lib.checkpoint import (
+from openmontage.lib.checkpoint import (
     write_checkpoint,
     read_checkpoint,
     get_completed_stages,
@@ -27,8 +27,8 @@ from lib.checkpoint import (
     STAGES,
     CANONICAL_STAGE_ARTIFACTS,
 )
-from tools.cost_tracker import CostTracker, BudgetMode
-from schemas.artifacts import validate_artifact, list_schemas
+from openmontage.tools.cost_tracker import CostTracker, BudgetMode
+from openmontage.schemas.artifacts import validate_artifact, list_schemas
 from styles.playbook_loader import load_playbook, validate_accessibility
 
 OUT = os.path.join(os.path.dirname(__file__), "output")
@@ -465,8 +465,8 @@ write_checkpoint(
 # ===================================================================
 print("\n--- Stage 6: compose (real tools) ---")
 
-from tools.audio.audio_mixer import AudioMixer
-from tools.video.video_compose import VideoCompose
+from openmontage.tools.audio.audio_mixer import AudioMixer
+from openmontage.tools.video.video_compose import VideoCompose
 
 # Step 1: Mix narration + music
 print("  Mixing audio...")

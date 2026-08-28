@@ -13,7 +13,7 @@ from typing import Any, Optional
 
 from openai import OpenAI
 
-from openmontage.bridge import TOOL_DEFS
+from ...bridge import TOOL_DEFS
 
 
 @dataclass

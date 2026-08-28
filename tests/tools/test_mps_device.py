@@ -35,7 +35,7 @@ def test_get_torch_device_returns_mps_when_cuda_absent(mock_torch):
     mock_torch.backends.mps.is_built.return_value = True
     mock_torch.backends.mps.is_available.return_value = True
 
-    from tools.video._shared import get_torch_device
+    from openmontage.tools.video._shared import get_torch_device
     assert get_torch_device() == "mps"
 
 
@@ -45,7 +45,7 @@ def test_get_torch_device_returns_cpu_as_fallback(mock_torch):
     mock_torch.backends.mps.is_built.return_value = True
     mock_torch.backends.mps.is_available.return_value = False
 
-    from tools.video._shared import get_torch_device
+    from openmontage.tools.video._shared import get_torch_device
     assert get_torch_device() == "cpu"
 
 
@@ -55,7 +55,7 @@ def test_get_torch_device_returns_cuda_when_available(mock_torch):
     mock_torch.backends.mps.is_built.return_value = True
     mock_torch.backends.mps.is_available.return_value = True
 
-    from tools.video._shared import get_torch_device
+    from openmontage.tools.video._shared import get_torch_device
     assert get_torch_device() == "cuda"
 
 
@@ -65,7 +65,7 @@ def test_get_torch_device_returns_cpu_when_torch_not_installed():
     try:
         # Make torch unimportable
         sys.modules["torch"] = None  # type: ignore[assignment]
-        from tools.video._shared import get_torch_device
+        from openmontage.tools.video._shared import get_torch_device
         assert get_torch_device() == "cpu"
     finally:
         if previous is None:
@@ -84,7 +84,7 @@ def test_get_torch_device_cpu_when_mps_backend_missing(mock_torch):
     # Simulate a torch build without mps backend
     del mock_torch.backends.mps
 
-    from tools.video._shared import get_torch_device
+    from openmontage.tools.video._shared import get_torch_device
     assert get_torch_device() == "cpu"
 
 
@@ -94,7 +94,7 @@ def test_get_torch_device_cpu_when_mps_not_built(mock_torch):
     mock_torch.backends.mps.is_built.return_value = False
     mock_torch.backends.mps.is_available.return_value = False
 
-    from tools.video._shared import get_torch_device
+    from openmontage.tools.video._shared import get_torch_device
     assert get_torch_device() == "cpu"
 
 
@@ -124,7 +124,7 @@ def _make_pipeline_mocks(monkeypatch, *, cuda=False, mps=False, bf16=False):
     monkeypatch.setitem(sys.modules, "torch", fake_torch)
     monkeypatch.setitem(sys.modules, "diffusers", fake_diffusers)
 
-    from tools.video import _shared
+    from openmontage.tools.video import _shared
     importlib.reload(_shared)
 
     return _shared, fake_pipeline_class, fake_pipeline_instance
@@ -173,7 +173,7 @@ def test_load_diffusers_pipeline_cpu_uses_float32(monkeypatch):
 
 def test_upscale_install_instructions_mentions_apple_silicon():
     """install_instructions must not tell M-series users they need CUDA."""
-    from tools.enhancement.upscale import Upscale
+    from openmontage.tools.enhancement.upscale import Upscale
     tool = Upscale()
     inst = tool.install_instructions
     assert "MPS" in inst or "Apple" in inst or "macOS" in inst, (
@@ -234,7 +234,7 @@ def test_upscale_build_upsampler_uses_signature_guard(monkeypatch):
     monkeypatch.setitem(sys.modules, "tools.video._shared", fake_shared)
     fake_shared.get_torch_device.return_value = "mps"
 
-    from tools.enhancement import upscale
+    from openmontage.tools.enhancement import upscale
     importlib.reload(upscale)
 
     tool = upscale.Upscale()
@@ -275,7 +275,7 @@ def test_upscale_build_upsampler_skips_device_when_unsupported(monkeypatch):
     monkeypatch.setitem(sys.modules, "tools.video._shared", fake_shared)
     fake_shared.get_torch_device.return_value = "mps"
 
-    from tools.enhancement import upscale
+    from openmontage.tools.enhancement import upscale
     importlib.reload(upscale)
 
     tool = upscale.Upscale()
@@ -329,7 +329,7 @@ def test_face_restore_uses_signature_guard(monkeypatch):
     fake_shared.get_torch_device.return_value = "mps"
     monkeypatch.setitem(sys.modules, "tools.video._shared", fake_shared)
 
-    from tools.enhancement import face_restore
+    from openmontage.tools.enhancement import face_restore
     importlib.reload(face_restore)
 
     from pathlib import Path

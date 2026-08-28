@@ -4,13 +4,13 @@ from pathlib import Path
 
 import pytest
 
-from tools import atlas_client
-from tools.atlas_models import IMAGE_MODELS, VIDEO_MODELS
-from tools.base_tool import BaseTool, ExecutionMode, ToolRuntime, ToolStability, ToolStatus, ToolTier
-from tools.graphics.atlas_image import AtlasImage
-from tools.graphics.image_selector import ImageSelector
-from tools.video.atlas_video import AtlasVideo
-from tools.video.video_selector import VideoSelector
+from openmontage.tools import atlas_client
+from openmontage.tools.atlas_models import IMAGE_MODELS, VIDEO_MODELS
+from openmontage.tools.base_tool import BaseTool, ExecutionMode, ToolRuntime, ToolStability, ToolStatus, ToolTier
+from openmontage.tools.graphics.atlas_image import AtlasImage
+from openmontage.tools.graphics.image_selector import ImageSelector
+from openmontage.tools.video.atlas_video import AtlasVideo
+from openmontage.tools.video.video_selector import VideoSelector
 
 TOOLS = [AtlasImage, AtlasVideo]
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent

@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from tools.base_tool import ToolStatus
-from tools.tool_registry import ToolRegistry
-from tools.video.stock_sources import Candidate
-from tools.video.corpus_builder import CorpusBuilder
-from tools.video.direct_clip_search import DirectClipSearch
-from tools.video.video_compose import VideoCompose
+from openmontage.tools.base_tool import ToolStatus
+from openmontage.tools.tool_registry import ToolRegistry
+from openmontage.tools.video.stock_sources import Candidate
+from openmontage.tools.video.corpus_builder import CorpusBuilder
+from openmontage.tools.video.direct_clip_search import DirectClipSearch
+from openmontage.tools.video.video_compose import VideoCompose
 
 
 class _DummySource:
@@ -26,7 +26,7 @@ class _DummySource:
 
 
 def test_corpus_builder_reports_source_level_discoverability(monkeypatch):
-    import tools.video.stock_sources as stock_sources
+    import openmontage.tools.video.stock_sources as stock_sources
 
     monkeypatch.setattr(
         stock_sources,
@@ -70,7 +70,7 @@ def test_corpus_builder_reports_source_level_discoverability(monkeypatch):
 
 
 def test_corpus_builder_rejects_unavailable_pinned_sources(monkeypatch, tmp_path):
-    import tools.video.stock_sources as stock_sources
+    import openmontage.tools.video.stock_sources as stock_sources
 
     sources = {
         "pexels": _DummySource("pexels", False),
@@ -189,7 +189,7 @@ def test_video_compose_rejects_unknown_render_runtime(tmp_path):
 
 
 def test_provider_menu_preserves_tool_discovery_metadata(monkeypatch):
-    import tools.video.stock_sources as stock_sources
+    import openmontage.tools.video.stock_sources as stock_sources
 
     monkeypatch.setattr(stock_sources, "all_sources", lambda: [_DummySource("archive_org", True)])
     monkeypatch.setattr(stock_sources, "available_sources", lambda: [_DummySource("archive_org", True)])
@@ -222,8 +222,8 @@ def test_provider_menu_preserves_tool_discovery_metadata(monkeypatch):
 def test_direct_clip_search_honors_overall_timeout(monkeypatch, tmp_path):
     """F-13 regression: direct clip search must stop on its own deadline and
     return partial progress instead of relying on an external PTY interrupt."""
-    import tools.video.direct_clip_search as direct_clip_search
-    import tools.video.stock_sources as stock_sources
+    import openmontage.tools.video.direct_clip_search as direct_clip_search
+    import openmontage.tools.video.stock_sources as stock_sources
 
     class SlowSource(_DummySource):
         def search(self, query: str, filters):
@@ -278,8 +278,8 @@ def test_direct_clip_search_honors_overall_timeout(monkeypatch, tmp_path):
 def test_direct_clip_search_times_out_streaming_download(monkeypatch, tmp_path):
     """F-13 regression: a streaming adapter download must not run past the
     tool-level deadline just because bytes keep arriving."""
-    import tools.video.direct_clip_search as direct_clip_search
-    import tools.video.stock_sources as stock_sources
+    import openmontage.tools.video.direct_clip_search as direct_clip_search
+    import openmontage.tools.video.stock_sources as stock_sources
     import requests
 
     clock = {"now": 0.0}
@@ -356,8 +356,8 @@ def test_direct_clip_search_reports_downloaded_clip_when_thumbnail_times_out(
 ):
     """F-13 regression: timeout data should include a clip that was already
     downloaded and validated before thumbnail extraction hit the deadline."""
-    import tools.video.direct_clip_search as direct_clip_search
-    import tools.video.stock_sources as stock_sources
+    import openmontage.tools.video.direct_clip_search as direct_clip_search
+    import openmontage.tools.video.stock_sources as stock_sources
 
     clock = {"now": 0.0}
 

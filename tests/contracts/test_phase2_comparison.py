@@ -47,10 +47,10 @@ def comparison_outputs(tmp_path_factory):
     if not _has_ffmpeg():
         pytest.skip("FFmpeg not available")
 
-    from tools.video.video_compose import VideoCompose
-    from tools.enhancement.face_enhance import FaceEnhance
-    from tools.enhancement.color_grade import ColorGrade
-    from tools.audio.audio_enhance import AudioEnhance
+    from openmontage.tools.video.video_compose import VideoCompose
+    from openmontage.tools.enhancement.face_enhance import FaceEnhance
+    from openmontage.tools.enhancement.color_grade import ColorGrade
+    from openmontage.tools.audio.audio_enhance import AudioEnhance
 
     tmp = tmp_path_factory.mktemp("comparison")
     results = {}

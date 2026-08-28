@@ -3,7 +3,7 @@ import json
 import pytest
 from tests.contracts.test_phase0_contracts import sample_artifact
 
-from lib.checkpoint import (
+from openmontage.lib.checkpoint import (
     CheckpointValidationError,
     init_project,
     write_checkpoint,

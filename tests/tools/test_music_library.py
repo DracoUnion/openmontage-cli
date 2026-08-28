@@ -13,9 +13,9 @@ import pytest
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.audio.music_library import MusicLibrary
-from tools.base_tool import ToolStatus, ToolTier
-from tools.tool_registry import ToolRegistry
+from openmontage.tools.audio.music_library import MusicLibrary
+from openmontage.tools.base_tool import ToolStatus, ToolTier
+from openmontage.tools.tool_registry import ToolRegistry
 
 
 def _make_track(path: Path, data: bytes = b"\x00\x01\x02\x03") -> None:

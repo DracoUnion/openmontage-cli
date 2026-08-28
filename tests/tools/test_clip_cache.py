@@ -13,7 +13,7 @@ from pathlib import Path
 
 import pytest
 
-from tools.video.clip_cache import (
+from openmontage.tools.video.clip_cache import (
     CacheEntry,
     ClipCache,
     _link_or_copy,

@@ -14,7 +14,7 @@ import types
 
 import pytest
 
-from tools.audio.music_gen import MusicGen
+from openmontage.tools.audio.music_gen import MusicGen
 
 
 class _FakeResponse:

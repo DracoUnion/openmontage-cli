@@ -10,16 +10,16 @@ import pytest
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.base_tool import BaseTool, ToolResult, ToolTier, ToolStatus
-from tools.tool_registry import ToolRegistry
+from openmontage.tools.base_tool import BaseTool, ToolResult, ToolTier, ToolStatus
+from openmontage.tools.tool_registry import ToolRegistry
 
-from tools.enhancement.face_enhance import FaceEnhance, PRESETS as FACE_PRESETS
-from tools.analysis.scene_detect import SceneDetect
-from tools.enhancement.color_grade import ColorGrade, PROFILES as COLOR_PROFILES
-from tools.audio.audio_enhance import AudioEnhance, PRESETS as AUDIO_PRESETS
-from tools.graphics.image_selector import ImageSelector
-from tools.graphics.code_snippet import CodeSnippet, THEMES as CODE_THEMES
-from tools.graphics.diagram_gen import DiagramGen
+from openmontage.tools.enhancement.face_enhance import FaceEnhance, PRESETS as FACE_PRESETS
+from openmontage.tools.analysis.scene_detect import SceneDetect
+from openmontage.tools.enhancement.color_grade import ColorGrade, PROFILES as COLOR_PROFILES
+from openmontage.tools.audio.audio_enhance import AudioEnhance, PRESETS as AUDIO_PRESETS
+from openmontage.tools.graphics.image_selector import ImageSelector
+from openmontage.tools.graphics.code_snippet import CodeSnippet, THEMES as CODE_THEMES
+from openmontage.tools.graphics.diagram_gen import DiagramGen
 
 
 PHASE2_TOOLS = [

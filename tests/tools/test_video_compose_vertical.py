@@ -15,7 +15,7 @@ from pathlib import Path
 
 import pytest
 
-from tools.video.video_compose import VideoCompose
+from openmontage.tools.video.video_compose import VideoCompose
 
 pytestmark = pytest.mark.skipif(
     shutil.which("ffmpeg") is None or shutil.which("ffprobe") is None,

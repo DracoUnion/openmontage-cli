@@ -29,7 +29,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 
-from tools.video.hyperframes_compose import HyperFramesCompose
+from openmontage.tools.video.hyperframes_compose import HyperFramesCompose
 
 
 OUT = Path(__file__).resolve().parent / "output"

@@ -18,16 +18,16 @@ import pytest
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from lib.config_model import OpenMontageConfig
-from lib.checkpoint import (
+from openmontage.lib.config_model import OpenMontageConfig
+from openmontage.lib.checkpoint import (
     CheckpointValidationError,
     STAGES,
     get_next_stage,
     read_checkpoint,
     write_checkpoint,
 )
-from lib.media_profiles import get_profile, ffmpeg_output_args, ALL_PROFILES
-from lib.pipeline_loader import (
+from openmontage.lib.media_profiles import get_profile, ffmpeg_output_args, ALL_PROFILES
+from openmontage.lib.pipeline_loader import (
     get_required_tools,
     get_stage_order,
     get_stage_skill,
@@ -37,10 +37,10 @@ from lib.pipeline_loader import (
     load_pipeline,
     pipeline_supports_reference_input,
 )
-from tools.base_tool import BaseTool, ToolResult, ToolTier, ToolStatus
-from tools.tool_registry import ToolRegistry
-from tools.cost_tracker import CostTracker, BudgetMode, BudgetExceededError, ApprovalRequiredError
-from schemas.artifacts import load_schema, validate_artifact, list_schemas
+from openmontage.tools.base_tool import BaseTool, ToolResult, ToolTier, ToolStatus
+from openmontage.tools.tool_registry import ToolRegistry
+from openmontage.tools.cost_tracker import CostTracker, BudgetMode, BudgetExceededError, ApprovalRequiredError
+from openmontage.schemas.artifacts import load_schema, validate_artifact, list_schemas
 
 
 def sample_artifact(name: str) -> dict:
@@ -445,7 +445,7 @@ class TestToolRegistry:
         (package_dir / "demo_tool.py").write_text(
             "\n".join(
                 [
-                    "from tools.base_tool import BaseTool, ToolResult, ToolTier",
+                    "from openmontage.tools.base_tool import BaseTool, ToolResult, ToolTier",
                     "",
                     "class DiscoveredTool(BaseTool):",
                     "    name = 'discovered'",

@@ -9,7 +9,7 @@ from __future__ import annotations
 import pytest
 import requests
 
-from tools.base_tool import ToolStatus
+from openmontage.tools.base_tool import ToolStatus
 
 
 class _FakeResponse:
@@ -55,8 +55,8 @@ def _h3_success_task(task_id="task-h3"):
 
 
 def test_minimax_video_is_discovered_as_direct_provider():
-    from tools.tool_registry import ToolRegistry
-    from tools.video.minimax_video import DEFAULT_MODEL, MODELS
+    from openmontage.tools.tool_registry import ToolRegistry
+    from openmontage.tools.video.minimax_video import DEFAULT_MODEL, MODELS
 
     registry = ToolRegistry()
     registry.discover()
@@ -81,7 +81,7 @@ def test_minimax_video_is_discovered_as_direct_provider():
 
 
 def test_minimax_video_unavailable_without_key(monkeypatch):
-    from tools.video.minimax_video import MiniMaxVideo
+    from openmontage.tools.video.minimax_video import MiniMaxVideo
 
     monkeypatch.delenv("MINIMAX_API_KEY", raising=False)
     assert MiniMaxVideo().get_status() == ToolStatus.UNAVAILABLE
@@ -91,7 +91,7 @@ def test_minimax_video_unavailable_without_key(monkeypatch):
 
 
 def test_minimax_video_region_routing(monkeypatch):
-    from tools.video.minimax_video import MiniMaxVideo
+    from openmontage.tools.video.minimax_video import MiniMaxVideo
 
     tool = MiniMaxVideo()
     monkeypatch.delenv("MINIMAX_BASE_URL", raising=False)
@@ -109,7 +109,7 @@ def test_minimax_video_region_routing(monkeypatch):
 
 
 def test_minimax_h3_text_to_video_v2_contract(monkeypatch, tmp_path):
-    from tools.video.minimax_video import MiniMaxVideo
+    from openmontage.tools.video.minimax_video import MiniMaxVideo
 
     monkeypatch.setenv("MINIMAX_API_KEY", "test-minimax-key")
     monkeypatch.setenv("MINIMAX_REGION", "global")
@@ -161,7 +161,7 @@ def test_minimax_h3_text_to_video_v2_contract(monkeypatch, tmp_path):
 
 
 def test_minimax_h3_reference_content_and_cn_watermark(monkeypatch, tmp_path):
-    from tools.video.minimax_video import MiniMaxVideo
+    from openmontage.tools.video.minimax_video import MiniMaxVideo
 
     monkeypatch.setenv("MINIMAX_API_KEY", "test-minimax-key")
     monkeypatch.setenv("MINIMAX_REGION", "cn")
@@ -211,7 +211,7 @@ def test_minimax_h3_reference_content_and_cn_watermark(monkeypatch, tmp_path):
 
 
 def test_minimax_h3_validates_frame_and_audio_rules(monkeypatch):
-    from tools.video.minimax_video import MiniMaxVideo
+    from openmontage.tools.video.minimax_video import MiniMaxVideo
 
     monkeypatch.setenv("MINIMAX_API_KEY", "test-minimax-key")
     tool = MiniMaxVideo()
@@ -238,7 +238,7 @@ def test_minimax_h3_validates_frame_and_audio_rules(monkeypatch):
 
 
 def test_minimax_h3_normalizes_selector_duration_and_first_last_frames(monkeypatch):
-    from tools.video.minimax_video import MiniMaxVideo
+    from openmontage.tools.video.minimax_video import MiniMaxVideo
 
     monkeypatch.setenv("MINIMAX_API_KEY", "test-minimax-key")
     tool = MiniMaxVideo()
@@ -276,7 +276,7 @@ def test_minimax_h3_normalizes_selector_duration_and_first_last_frames(monkeypat
 
 
 def test_minimax_hailuo_text_to_video_v1_contract(monkeypatch, tmp_path):
-    from tools.video.minimax_video import MiniMaxVideo
+    from openmontage.tools.video.minimax_video import MiniMaxVideo
 
     monkeypatch.setenv("MINIMAX_API_KEY", "test-minimax-key")
     monkeypatch.setenv("MINIMAX_REGION", "global")
@@ -340,7 +340,7 @@ def test_minimax_hailuo_text_to_video_v1_contract(monkeypatch, tmp_path):
 
 
 def test_minimax_hailuo_image_to_video_prompt_is_optional(monkeypatch, tmp_path):
-    from tools.video.minimax_video import MiniMaxVideo
+    from openmontage.tools.video.minimax_video import MiniMaxVideo
 
     monkeypatch.setenv("MINIMAX_API_KEY", "test-minimax-key")
     monkeypatch.setattr("time.sleep", lambda _seconds: None)
@@ -390,9 +390,9 @@ def test_minimax_hailuo_image_to_video_prompt_is_optional(monkeypatch, tmp_path)
 
 
 def test_video_selector_routes_reference_image_to_minimax_h3(monkeypatch, tmp_path):
-    from tools.video import _shared
-    from tools.video.minimax_video import MiniMaxVideo
-    from tools.video.video_selector import VideoSelector
+    from openmontage.tools.video import _shared
+    from openmontage.tools.video.minimax_video import MiniMaxVideo
+    from openmontage.tools.video.video_selector import VideoSelector
 
     monkeypatch.setenv("MINIMAX_API_KEY", "test-minimax-key")
     monkeypatch.setattr("time.sleep", lambda _seconds: None)
@@ -444,7 +444,7 @@ def test_video_selector_routes_reference_image_to_minimax_h3(monkeypatch, tmp_pa
 
 
 def test_minimax_video_surfaces_v1_base_resp_error(monkeypatch):
-    from tools.video.minimax_video import MiniMaxVideo
+    from openmontage.tools.video.minimax_video import MiniMaxVideo
 
     monkeypatch.setenv("MINIMAX_API_KEY", "test-minimax-key")
 
@@ -462,8 +462,8 @@ def test_minimax_video_surfaces_v1_base_resp_error(monkeypatch):
 
 @pytest.mark.parametrize("model", ["MiniMax-H3", "MiniMax-Hailuo-2.3"])
 def test_polling_timeout_is_bounded_and_preserves_task_id(monkeypatch, model):
-    import tools.video.minimax_video as minimax_module
-    from tools.video.minimax_video import MiniMaxVideo
+    import openmontage.tools.video.minimax_video as minimax_module
+    from openmontage.tools.video.minimax_video import MiniMaxVideo
 
     monkeypatch.setenv("MINIMAX_API_KEY", "test-minimax-key")
     monkeypatch.setattr(

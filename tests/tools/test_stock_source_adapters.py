@@ -1,6 +1,6 @@
-from tools.video.stock_sources import all_sources
-from tools.video.stock_sources.unsplash import _build_download_url, _orientation_for_unsplash
-from tools.video.stock_sources.wikimedia import (
+from openmontage.tools.video.stock_sources import all_sources
+from openmontage.tools.video.stock_sources.unsplash import _build_download_url, _orientation_for_unsplash
+from openmontage.tools.video.stock_sources.wikimedia import (
     _build_search_queries,
     _kind_from_mime,
     _meta_value,

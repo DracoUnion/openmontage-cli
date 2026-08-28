@@ -12,10 +12,10 @@ import pytest
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.avatar.kling_avatar import KlingAvatar
-from tools.avatar.kling_lip_sync import KlingLipSync
-from tools.avatar.lip_sync import LipSync
-from tools.avatar.talking_head import TalkingHead
+from openmontage.tools.avatar.kling_avatar import KlingAvatar
+from openmontage.tools.avatar.kling_lip_sync import KlingLipSync
+from openmontage.tools.avatar.lip_sync import LipSync
+from openmontage.tools.avatar.talking_head import TalkingHead
 
 
 def test_registry_discovers_kling_avatar(monkeypatch, isolated_tool_registry):

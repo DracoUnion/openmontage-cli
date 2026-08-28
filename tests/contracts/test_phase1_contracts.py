@@ -9,19 +9,19 @@ import pytest
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.base_tool import BaseTool, ToolResult, ToolTier, ToolStatus, DependencyError
-from tools.tool_registry import ToolRegistry
-from lib.pipeline_loader import load_pipeline, get_stage_order, get_required_tools, list_pipelines
+from openmontage.tools.base_tool import BaseTool, ToolResult, ToolTier, ToolStatus, DependencyError
+from openmontage.tools.tool_registry import ToolRegistry
+from openmontage.lib.pipeline_loader import load_pipeline, get_stage_order, get_required_tools, list_pipelines
 
 
 # ---- Tool imports ----
 
-from tools.analysis.transcriber import Transcriber
-from tools.video.video_trimmer import VideoTrimmer
-from tools.subtitle.subtitle_gen import SubtitleGen
-from tools.analysis.frame_sampler import FrameSampler
-from tools.audio.audio_mixer import AudioMixer
-from tools.video.video_compose import VideoCompose
+from openmontage.tools.analysis.transcriber import Transcriber
+from openmontage.tools.video.video_trimmer import VideoTrimmer
+from openmontage.tools.subtitle.subtitle_gen import SubtitleGen
+from openmontage.tools.analysis.frame_sampler import FrameSampler
+from openmontage.tools.audio.audio_mixer import AudioMixer
+from openmontage.tools.video.video_compose import VideoCompose
 
 
 # ---- Contract: every tool inherits BaseTool and has required fields ----

@@ -46,7 +46,7 @@ def _queue_mocks(monkeypatch):
 def test_fal_seedance_25_uses_current_endpoint_and_reference_fields(
     monkeypatch, tmp_path
 ):
-    from tools.video.seedance_video import SeedanceVideo
+    from openmontage.tools.video.seedance_video import SeedanceVideo
 
     monkeypatch.setenv("FAL_KEY", "test")
     calls = _queue_mocks(monkeypatch)
@@ -74,9 +74,9 @@ def test_fal_seedance_25_uses_current_endpoint_and_reference_fields(
 def test_fal_gemini_omni_and_minimax_h3_are_discovered_and_submit(
     monkeypatch, tmp_path
 ):
-    from tools.tool_registry import ToolRegistry
-    from tools.video.gemini_omni_fal import GeminiOmniFalVideo
-    from tools.video.minimax_fal_video import MiniMaxFalVideo
+    from openmontage.tools.tool_registry import ToolRegistry
+    from openmontage.tools.video.gemini_omni_fal import GeminiOmniFalVideo
+    from openmontage.tools.video.minimax_fal_video import MiniMaxFalVideo
 
     monkeypatch.setenv("FAL_KEY", "test")
     registry = ToolRegistry()
@@ -125,7 +125,7 @@ def test_fal_gemini_omni_and_minimax_h3_are_discovered_and_submit(
 
 
 def test_runway_supports_all_three_current_model_identifiers(monkeypatch, tmp_path):
-    from tools.video.runway_video import RunwayVideo
+    from openmontage.tools.video.runway_video import RunwayVideo
 
     monkeypatch.setenv("RUNWAY_API_KEY", "test")
     calls = {"posts": []}
@@ -160,7 +160,7 @@ def test_runway_supports_all_three_current_model_identifiers(monkeypatch, tmp_pa
 
 
 def test_runway_uses_each_models_official_request_shape(monkeypatch, tmp_path):
-    from tools.video.runway_video import RunwayVideo
+    from openmontage.tools.video.runway_video import RunwayVideo
 
     monkeypatch.setenv("RUNWAY_API_KEY", "test")
     calls = {"posts": []}
@@ -240,7 +240,7 @@ def test_runway_uses_each_models_official_request_shape(monkeypatch, tmp_path):
 
 
 def test_comfyui_partner_workflows_and_local_h3_metadata():
-    from tools.video.comfyui_video import ComfyUIVideo
+    from openmontage.tools.video.comfyui_video import ComfyUIVideo
 
     tool = ComfyUIVideo()
     for family, node_class in (

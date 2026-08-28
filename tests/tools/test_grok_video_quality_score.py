@@ -9,7 +9,7 @@ under-ranked. This pins the field and confirms it surfaces in get_info().
 
 from __future__ import annotations
 
-from tools.video.grok_video import GrokVideo
+from openmontage.tools.video.grok_video import GrokVideo
 
 
 def test_grok_video_has_quality_score():

@@ -8,13 +8,13 @@ from pathlib import Path
 
 import jsonschema
 
-from tools.base_tool import ToolStatus
-from tools.graphics import atlas_3d, fal_3d
-from tools.graphics.atlas_3d import Atlas3D
-from tools.graphics import blender_world
-from tools.graphics.blender_world import BlenderWorld, first_missing_frame
-from tools.graphics.fal_3d import Fal3D
-from tools.tool_registry import ToolRegistry
+from openmontage.tools.base_tool import ToolStatus
+from openmontage.tools.graphics import atlas_3d, fal_3d
+from openmontage.tools.graphics.atlas_3d import Atlas3D
+from openmontage.tools.graphics import blender_world
+from openmontage.tools.graphics.blender_world import BlenderWorld, first_missing_frame
+from openmontage.tools.graphics.fal_3d import Fal3D
+from openmontage.tools.tool_registry import ToolRegistry
 
 
 class _Response:

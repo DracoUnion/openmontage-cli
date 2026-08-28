@@ -57,7 +57,7 @@ def _build_image_content(index: int) -> bytes:
 @pytest.fixture
 def seedream_tool(monkeypatch):
     monkeypatch.setenv("FAL_KEY", "test-fal-key")
-    from tools.graphics.seedream_image import SeedreamImage
+    from openmontage.tools.graphics.seedream_image import SeedreamImage
     return SeedreamImage()
 
 
@@ -218,7 +218,7 @@ class TestValidation:
     def test_missing_api_key_returns_error(self, monkeypatch):
         monkeypatch.delenv("FAL_KEY", raising=False)
         monkeypatch.delenv("FAL_AI_API_KEY", raising=False)
-        from tools.graphics.seedream_image import SeedreamImage
+        from openmontage.tools.graphics.seedream_image import SeedreamImage
         result = SeedreamImage().execute({"prompt": "t"})
         assert not result.success
         assert "FAL_KEY" in result.error
@@ -229,7 +229,7 @@ class TestValidation:
     def test_status_unavailable_without_key(self, monkeypatch):
         monkeypatch.delenv("FAL_KEY", raising=False)
         monkeypatch.delenv("FAL_AI_API_KEY", raising=False)
-        from tools.graphics.seedream_image import SeedreamImage
+        from openmontage.tools.graphics.seedream_image import SeedreamImage
         assert SeedreamImage().get_status().name == "UNAVAILABLE"
 
     def test_missing_request_id_raises_error(self, seedream_tool, mock_requests):
@@ -274,7 +274,7 @@ class TestMetadata:
     def test_image_selector_routes_count_and_returns_distinct_artifacts(
         self, seedream_tool, tmp_path, mock_requests, monkeypatch
     ):
-        from tools.graphics.image_selector import ImageSelector
+        from openmontage.tools.graphics.image_selector import ImageSelector
 
         mock_post, mock_get = mock_requests
         _setup_mock_execution(mock_post, mock_get, num_images=2)

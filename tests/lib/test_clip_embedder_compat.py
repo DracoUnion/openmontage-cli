@@ -1,4 +1,4 @@
-from lib.clip_embedder import _as_feature_tensor
+from openmontage.lib.clip_embedder import _as_feature_tensor
 
 
 class _Tensor:

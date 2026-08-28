@@ -10,8 +10,8 @@ import urllib.request
 
 import pytest
 
-from lib.checkpoint import CANONICAL_STAGE_ARTIFACTS, init_project, write_checkpoint
-from lib.pipeline_loader import get_stage_order, load_pipeline
+from openmontage.lib.checkpoint import CANONICAL_STAGE_ARTIFACTS, init_project, write_checkpoint
+from openmontage.lib.pipeline_loader import get_stage_order, load_pipeline
 from scripts import backlot_screenshot_stage
 from tests.contracts.test_phase0_contracts import sample_artifact
 

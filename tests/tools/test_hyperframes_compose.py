@@ -14,9 +14,9 @@ from typing import Any
 
 import pytest
 
-from tools.base_tool import ToolStatus
-from tools.video.hyperframes_compose import HyperFramesCompose
-from tools.video.video_compose import VideoCompose
+from openmontage.tools.base_tool import ToolStatus
+from openmontage.tools.video.hyperframes_compose import HyperFramesCompose
+from openmontage.tools.video.video_compose import VideoCompose
 
 
 # ------------------------------------------------------------------
@@ -148,7 +148,7 @@ def test_provider_menu_summary_deduplicates_providers_across_buckets():
     both reporting provider='seedance'), the summary previously listed the
     provider as BOTH available and unavailable — reads as a contradiction to
     users. Any-available wins over any-unavailable."""
-    from tools.tool_registry import registry
+    from openmontage.tools.tool_registry import registry
 
     registry.discover()
     s = registry.provider_menu_summary()
@@ -171,7 +171,7 @@ def test_provider_menu_summary_is_cp1252_safe():
     This protects preflight even if a future tool author writes em-dashes
     into install_instructions."""
     import json
-    from tools.tool_registry import registry, _scrub_unicode_dashes
+    from openmontage.tools.tool_registry import registry, _scrub_unicode_dashes
 
     # Direct unit test of the helper.
     dirty = "one \u2014 two \u2013 three \u2018quoted\u2019"
@@ -313,7 +313,7 @@ def test_provider_menu_summary_returns_expected_shape():
     """Regression: AGENT_GUIDE.md line 246 points agents at provider_menu_summary
     for the capability menu. The shape must be stable and cover the four fields
     the guide references."""
-    from tools.tool_registry import registry
+    from openmontage.tools.tool_registry import registry
 
     registry.discover()
     s = registry.provider_menu_summary()
@@ -387,7 +387,7 @@ def test_hyperframes_render_resolves_relative_output_path_once(tmp_path, monkeyp
     """A successful CLI render must not be reported missing for a relative path."""
     import subprocess
 
-    from tools.base_tool import ToolResult
+    from openmontage.tools.base_tool import ToolResult
 
     workspace = tmp_path / "workspace"
     workspace.mkdir()
@@ -1088,7 +1088,7 @@ def test_scaffold_rejects_empty_cuts(tmp_path: Path):
 
 
 def test_style_bridge_fallback_has_all_required_vars():
-    from lib.hyperframes_style_bridge import style_bridge
+    from openmontage.lib.hyperframes_style_bridge import style_bridge
 
     css, design = style_bridge(None, None)
     for key in (
@@ -1106,7 +1106,7 @@ def test_style_bridge_fallback_has_all_required_vars():
 
 
 def test_style_bridge_picks_up_playbook_palette():
-    from lib.hyperframes_style_bridge import style_bridge
+    from openmontage.lib.hyperframes_style_bridge import style_bridge
 
     playbook = {
         "name": "neon-test",
@@ -1135,7 +1135,7 @@ def test_style_bridge_picks_up_playbook_palette():
 
 
 def test_style_bridge_edit_decision_override_wins():
-    from lib.hyperframes_style_bridge import style_bridge
+    from openmontage.lib.hyperframes_style_bridge import style_bridge
 
     playbook = {
         "visual_language": {"color_palette": {"background": "#111", "text": "#eee"}},
@@ -1201,9 +1201,9 @@ def test_schemas_accept_voice_performance_contract():
 
 
 def test_tts_provider_contracts_match_supported_fields():
-    from tools.audio.elevenlabs_tts import ElevenLabsTTS
-    from tools.audio.google_tts import GoogleTTS
-    from tools.audio.openai_tts import OpenAITTS
+    from openmontage.tools.audio.elevenlabs_tts import ElevenLabsTTS
+    from openmontage.tools.audio.google_tts import GoogleTTS
+    from openmontage.tools.audio.openai_tts import OpenAITTS
 
     google_props = GoogleTTS.input_schema["properties"]
     assert google_props["input_type"]["enum"] == ["text", "ssml"]
@@ -1279,7 +1279,7 @@ def test_decision_log_has_render_runtime_category():
 
 
 def test_slideshow_risk_accepts_render_runtime():
-    from lib.slideshow_risk import score_slideshow_risk
+    from openmontage.lib.slideshow_risk import score_slideshow_risk
 
     scenes = [
         {
@@ -1308,7 +1308,7 @@ def test_slideshow_risk_accepts_render_runtime():
 def test_composition_validator_hyperframes_asset_root(tmp_path: Path):
     """With render_runtime='hyperframes', the validator should look for
     assets next to index.html, not under remotion-composer/public."""
-    from tools.analysis.composition_validator import CompositionValidator
+    from openmontage.tools.analysis.composition_validator import CompositionValidator
 
     # Set up a fake HyperFrames workspace: hyperframes/ with index.html +
     # assets/. Composition JSON lives a sibling directory away.

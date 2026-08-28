@@ -185,7 +185,7 @@ Hand-authored Remotion composition. Source of truth lives here under
 ## Render
 
 ```python
-from tools.video.video_compose import VideoCompose
+from openmontage.tools.video.video_compose import VideoCompose
 P = r"{rel_proj.replace('/', chr(92)*2)}"  # absolute path on your machine
 VideoCompose().execute({{
   "operation": "render",

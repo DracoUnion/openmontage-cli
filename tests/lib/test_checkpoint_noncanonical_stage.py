@@ -17,7 +17,7 @@ import pytest
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from lib.checkpoint import (  # noqa: E402
+from openmontage.lib.checkpoint import (  # noqa: E402
     CheckpointValidationError,
     get_pipeline_stages,
     validate_checkpoint,

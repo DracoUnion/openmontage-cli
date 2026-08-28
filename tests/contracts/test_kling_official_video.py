@@ -9,9 +9,9 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools._kling.account import reset_account_usage_cache
-from tools._kling.errors import KlingAPIError
-from tools.video.kling_official_video import KlingOfficialVideo
+from openmontage.tools._kling.account import reset_account_usage_cache
+from openmontage.tools._kling.errors import KlingAPIError
+from openmontage.tools.video.kling_official_video import KlingOfficialVideo
 
 
 def test_registry_discovers_kling_official_video(monkeypatch, isolated_tool_registry):
@@ -364,7 +364,7 @@ def test_video_selector_prefers_official_provider_without_fal_upload(
 
     def fake_execute(self, inputs):
         seen.update(inputs)
-        from tools.base_tool import ToolResult
+        from openmontage.tools.base_tool import ToolResult
 
         return ToolResult(success=True, data={"output_path": "out.mp4"}, artifacts=["out.mp4"])
 

@@ -12,8 +12,8 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from lib.source_media_review import review_source_media  # noqa: E402
-from schemas.artifacts import validate_artifact  # noqa: E402
+from openmontage.lib.source_media_review import review_source_media  # noqa: E402
+from openmontage.schemas.artifacts import validate_artifact  # noqa: E402
 
 
 def test_no_source_media_produces_schema_valid_artifact(tmp_path):

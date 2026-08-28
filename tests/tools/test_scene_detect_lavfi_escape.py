@@ -7,7 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-from tools.analysis.scene_detect import SceneDetect
+from openmontage.tools.analysis.scene_detect import SceneDetect
 
 
 class SceneDetectEscapingTests(unittest.TestCase):

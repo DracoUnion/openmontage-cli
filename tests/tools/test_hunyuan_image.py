@@ -12,7 +12,7 @@ import pytest
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.base_tool import ToolStatus
+from openmontage.tools.base_tool import ToolStatus
 
 # ---------------------------------------------------------------------------
 # Tool discovery & metadata
@@ -20,7 +20,7 @@ from tools.base_tool import ToolStatus
 
 
 def test_hunyuan_image_is_discovered_by_registry():
-    from tools.tool_registry import ToolRegistry
+    from openmontage.tools.tool_registry import ToolRegistry
 
     registry = ToolRegistry()
     registry.discover()
@@ -33,7 +33,7 @@ def test_hunyuan_image_is_discovered_by_registry():
 
 
 def test_hunyuan_image_metadata():
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     tool = HunyuanImage()
     info = tool.get_info()
@@ -51,7 +51,7 @@ def test_hunyuan_image_metadata():
 
 
 def test_idempotency_includes_custom_watermark():
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     tool = HunyuanImage()
     base = {"prompt": "x"}
@@ -66,21 +66,21 @@ def test_idempotency_includes_custom_watermark():
 
 
 def test_status_unavailable_when_no_api_key(monkeypatch):
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     monkeypatch.delenv("TENCENT_TOKENHUB_API_KEY", raising=False)
     assert HunyuanImage().get_status() == ToolStatus.UNAVAILABLE
 
 
 def test_status_available_when_api_key_set(monkeypatch):
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     monkeypatch.setenv("TENCENT_TOKENHUB_API_KEY", "test-key-123")
     assert HunyuanImage().get_status() == ToolStatus.AVAILABLE
 
 
 def test_api_key_filters_comment_like_values(monkeypatch):
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     monkeypatch.setenv("TENCENT_TOKENHUB_API_KEY", "# this-is-a-comment")
     assert HunyuanImage()._api_key() is None
@@ -88,7 +88,7 @@ def test_api_key_filters_comment_like_values(monkeypatch):
 
 
 def test_api_key_strips_whitespace(monkeypatch):
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     monkeypatch.setenv("TENCENT_TOKENHUB_API_KEY", "  my-key  ")
     assert HunyuanImage()._api_key() == "my-key"
@@ -100,7 +100,7 @@ def test_api_key_strips_whitespace(monkeypatch):
 
 
 def test_estimate_cost():
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     tool = HunyuanImage()
     cost = tool.estimate_cost({})
@@ -109,7 +109,7 @@ def test_estimate_cost():
 
 
 def test_estimate_runtime():
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     tool = HunyuanImage()
     runtime = tool.estimate_runtime({})
@@ -122,7 +122,7 @@ def test_estimate_runtime():
 
 
 def test_build_payload_minimal():
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     tool = HunyuanImage()
     payload = tool._build_payload({"prompt": "a cat"})
@@ -130,7 +130,7 @@ def test_build_payload_minimal():
 
 
 def test_build_payload_all_params():
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     tool = HunyuanImage()
     payload = tool._build_payload({
@@ -150,7 +150,7 @@ def test_build_payload_all_params():
 
 
 def test_build_payload_with_logo_param():
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     tool = HunyuanImage()
     payload = tool._build_payload({
@@ -161,7 +161,7 @@ def test_build_payload_with_logo_param():
 
 
 def test_build_payload_logo_param_skips_empty():
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     tool = HunyuanImage()
     payload = tool._build_payload({
@@ -172,7 +172,7 @@ def test_build_payload_logo_param_skips_empty():
 
 
 def test_build_payload_omits_none_seed():
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     tool = HunyuanImage()
     payload = tool._build_payload({"prompt": "a cat", "seed": None})
@@ -185,7 +185,7 @@ def test_build_payload_omits_none_seed():
 
 
 def test_resolve_images_passes_urls_through():
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     refs = [
         "https://example.com/a.jpg",
@@ -196,7 +196,7 @@ def test_resolve_images_passes_urls_through():
 
 
 def test_resolve_images_encodes_local_file(tmp_path):
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     img = tmp_path / "test.png"
     img.write_bytes(b"fake-png-data")
@@ -207,14 +207,14 @@ def test_resolve_images_encodes_local_file(tmp_path):
 
 
 def test_resolve_images_raises_on_missing_file():
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     with pytest.raises(FileNotFoundError):
         HunyuanImage._resolve_images(["/nonexistent/path.jpg"])
 
 
 def test_resolve_images_raises_on_oversized_file(tmp_path):
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     big = tmp_path / "big.jpg"
     big.write_bytes(b"x" * (7 * 1024 * 1024))  # 7MB > 6MB limit
@@ -224,7 +224,7 @@ def test_resolve_images_raises_on_oversized_file(tmp_path):
 
 
 def test_resolve_images_detects_mime_from_extension(tmp_path):
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     cases = [
         ("ref.jpg", "image/jpeg"),
@@ -249,7 +249,7 @@ def test_resolve_images_detects_mime_from_extension(tmp_path):
 
 
 def test_resolve_output_paths_single():
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     paths = HunyuanImage._resolve_output_paths("/out/img.png", 1)
     assert len(paths) == 1
@@ -257,7 +257,7 @@ def test_resolve_output_paths_single():
 
 
 def test_resolve_output_paths_multi():
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     paths = HunyuanImage._resolve_output_paths("/out/img.png", 3)
     assert len(paths) == 3
@@ -271,7 +271,7 @@ def test_resolve_output_paths_multi():
 
 
 def test_auth_headers():
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     headers = HunyuanImage._auth_headers("my-api-key")
     assert headers["Authorization"] == "Bearer my-api-key"
@@ -284,7 +284,7 @@ def test_auth_headers():
 
 
 def test_json_or_raise_parses_valid_json():
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     class FakeResp:
         status_code = 200
@@ -296,7 +296,7 @@ def test_json_or_raise_parses_valid_json():
 
 
 def test_json_or_raise_raises_on_invalid_json():
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     class FakeResp:
         status_code = 500
@@ -309,13 +309,13 @@ def test_json_or_raise_raises_on_invalid_json():
 
 
 def test_check_response_passes_clean_payload():
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     HunyuanImage._check_response({"status": "completed"})  # no error -> no raise
 
 
 def test_check_response_raises_on_error_field():
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     with pytest.raises(RuntimeError, match="TokenHub API error"):
         HunyuanImage._check_response({
@@ -324,7 +324,7 @@ def test_check_response_raises_on_error_field():
 
 
 def test_check_response_raises_on_error_without_code():
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     with pytest.raises(RuntimeError, match="TokenHub API error"):
         HunyuanImage._check_response({"error": {"message": "something broke"}})
@@ -336,7 +336,7 @@ def test_check_response_raises_on_error_without_code():
 
 
 def test_safe_error_redacts_api_key(monkeypatch):
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     monkeypatch.setenv("TENCENT_TOKENHUB_API_KEY", "secret-key-abc")
     msg = HunyuanImage._safe_error(Exception("failed with secret-key-abc"))
@@ -345,7 +345,7 @@ def test_safe_error_redacts_api_key(monkeypatch):
 
 
 def test_safe_error_preserves_other_text(monkeypatch):
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     monkeypatch.setenv("TENCENT_TOKENHUB_API_KEY", "sk-123")
     msg = HunyuanImage._safe_error(Exception("network timeout: connection refused"))
@@ -359,7 +359,7 @@ def test_safe_error_preserves_other_text(monkeypatch):
 
 
 def test_execute_returns_error_without_api_key(monkeypatch):
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     monkeypatch.delenv("TENCENT_TOKENHUB_API_KEY", raising=False)
     result = HunyuanImage().execute({"prompt": "a cat"})
@@ -368,9 +368,9 @@ def test_execute_returns_error_without_api_key(monkeypatch):
 
 
 def test_image_selector_maps_shared_reference_input(monkeypatch, tmp_path):
-    from tools.base_tool import ToolResult
-    from tools.graphics.hunyuan_image import HunyuanImage
-    from tools.graphics.image_selector import ImageSelector
+    from openmontage.tools.base_tool import ToolResult
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.image_selector import ImageSelector
 
     monkeypatch.setenv("TENCENT_TOKENHUB_API_KEY", "test-key")
     tool = HunyuanImage()
@@ -407,7 +407,7 @@ def test_image_selector_maps_shared_reference_input(monkeypatch, tmp_path):
 
 
 def test_dry_run_no_side_effects(monkeypatch):
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     monkeypatch.setenv("TENCENT_TOKENHUB_API_KEY", "test-key")
     tool = HunyuanImage()
@@ -424,7 +424,7 @@ def test_dry_run_no_side_effects(monkeypatch):
 
 def test_execute_full_flow_with_mocked_api(monkeypatch, tmp_path):
     """Simulate the full submit → poll → download flow."""
-    from tools.graphics.hunyuan_image import HunyuanImage, _MODEL, _HOST
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage, _MODEL, _HOST
 
     monkeypatch.setenv("TENCENT_TOKENHUB_API_KEY", "test-key")
 
@@ -516,7 +516,7 @@ def test_execute_full_flow_with_mocked_api(monkeypatch, tmp_path):
 
 def test_execute_with_local_reference_images(monkeypatch, tmp_path):
     """Reference images from local paths should be base64-encoded in payload."""
-    from tools.graphics.hunyuan_image import HunyuanImage
+    from openmontage.tools.graphics.hunyuan_image import HunyuanImage
 
     monkeypatch.setenv("TENCENT_TOKENHUB_API_KEY", "test-key")
 

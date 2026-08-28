@@ -1,4 +1,4 @@
-from lib.delivery_promise import PromiseType, classify_from_brief
+from openmontage.lib.delivery_promise import PromiseType, classify_from_brief
 
 
 def test_classify_from_brief_source_led_reclassification_clears_motion_requirement() -> None:

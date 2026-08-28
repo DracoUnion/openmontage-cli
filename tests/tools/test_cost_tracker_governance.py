@@ -8,8 +8,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-from lib.config_model import BudgetMode
-from tools.cost_tracker import CostTracker
+from openmontage.lib.config_model import BudgetMode
+from openmontage.tools.cost_tracker import CostTracker
 
 
 class CostTrackerGovernanceTests(unittest.TestCase):

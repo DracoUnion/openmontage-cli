@@ -18,7 +18,7 @@ import pytest
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from lib.pipeline_loader import (
+from openmontage.lib.pipeline_loader import (
     load_pipeline,
     get_stage_order,
     get_required_tools,
@@ -26,20 +26,20 @@ from lib.pipeline_loader import (
     get_stage_review_focus,
     list_pipelines,
 )
-from lib.checkpoint import STAGES
-from schemas.artifacts import list_schemas
+from openmontage.lib.checkpoint import STAGES
+from openmontage.schemas.artifacts import list_schemas
 from styles.playbook_loader import load_playbook, list_playbooks, validate_playbook
-from tools.base_tool import ToolTier, ToolStatus
-from tools.audio.music_gen import MusicGen
-from tools.tool_registry import ToolRegistry
-from tools.audio.elevenlabs_tts import ElevenLabsTTS
-from tools.audio.openai_tts import OpenAITTS
-from tools.audio.piper_tts import PiperTTS
-from tools.audio.tts_selector import TTSSelector
-from tools.audio.google_tts import GoogleTTS
-from tools.graphics.google_imagen import GoogleImagen
-from tools.audio.google_music import GoogleMusic
-from tools.video.veo_video import VeoVideo
+from openmontage.tools.base_tool import ToolTier, ToolStatus
+from openmontage.tools.audio.music_gen import MusicGen
+from openmontage.tools.tool_registry import ToolRegistry
+from openmontage.tools.audio.elevenlabs_tts import ElevenLabsTTS
+from openmontage.tools.audio.openai_tts import OpenAITTS
+from openmontage.tools.audio.piper_tts import PiperTTS
+from openmontage.tools.audio.tts_selector import TTSSelector
+from openmontage.tools.audio.google_tts import GoogleTTS
+from openmontage.tools.graphics.google_imagen import GoogleImagen
+from openmontage.tools.audio.google_music import GoogleMusic
+from openmontage.tools.video.veo_video import VeoVideo
 
 
 # ---- Google Credentials ----
@@ -47,7 +47,7 @@ from tools.video.veo_video import VeoVideo
 
 class TestGoogleCredentials:
     def test_get_genai_client_with_google_api_key(self):
-        from tools.google_credentials import get_genai_client
+        from openmontage.tools.google_credentials import get_genai_client
         from google.genai import types
 
         mock_client = MagicMock()
@@ -928,7 +928,7 @@ class TestRemotionScaffold:
 class TestVideoComposeOperations:
     def test_render_operation_exists(self):
         from typing import Any
-        from tools.video.video_compose import VideoCompose
+        from openmontage.tools.video.video_compose import VideoCompose
 
         tool = VideoCompose()
         schema: Any = tool.input_schema
@@ -937,7 +937,7 @@ class TestVideoComposeOperations:
         assert "remotion_render" in ops
 
     def test_render_rejects_missing_inputs(self):
-        from tools.video.video_compose import VideoCompose
+        from openmontage.tools.video.video_compose import VideoCompose
 
         tool = VideoCompose()
         result = tool.execute({"operation": "render"})

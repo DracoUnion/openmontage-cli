@@ -14,9 +14,9 @@ import types
 
 import pytest
 
-from tools import atlas_client
-from tools.graphics.atlas_image import AtlasImage
-from tools.video.atlas_video import AtlasVideo
+from openmontage.tools import atlas_client
+from openmontage.tools.graphics.atlas_image import AtlasImage
+from openmontage.tools.video.atlas_video import AtlasVideo
 
 
 class FakeResponse:

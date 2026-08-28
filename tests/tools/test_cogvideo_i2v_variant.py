@@ -16,9 +16,9 @@ from __future__ import annotations
 
 import pytest
 
-from tools.base_tool import ToolStatus
-from tools.video._shared import COGVIDEO_VARIANTS
-from tools.video.cogvideo_video import CogVideoVideo
+from openmontage.tools.base_tool import ToolStatus
+from openmontage.tools.video._shared import COGVIDEO_VARIANTS
+from openmontage.tools.video.cogvideo_video import CogVideoVideo
 
 
 def test_2b_variant_is_t2v_only():
@@ -59,7 +59,7 @@ def test_execute_rejects_i2v_for_2b_variant(monkeypatch):
 
 def test_execute_allows_i2v_for_5b_variant(monkeypatch):
     """The default 5B variant still routes to generation for image_to_video."""
-    from tools.base_tool import ToolResult
+    from openmontage.tools.base_tool import ToolResult
 
     monkeypatch.setattr(
         CogVideoVideo, "get_status", lambda self: ToolStatus.AVAILABLE

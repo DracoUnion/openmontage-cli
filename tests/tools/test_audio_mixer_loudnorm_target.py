@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import math
 
-from tools.audio.audio_mixer import AudioMixer
+from openmontage.tools.audio.audio_mixer import AudioMixer
 
 
 def _filter(inputs: dict) -> str:

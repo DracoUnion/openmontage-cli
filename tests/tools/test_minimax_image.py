@@ -7,10 +7,10 @@ import base64
 import pytest
 import requests
 
-from tools.base_tool import ToolStatus
-from tools.graphics import minimax_image
-from tools.graphics.minimax_image import MiniMaxImage
-from tools.tool_registry import ToolRegistry
+from openmontage.tools.base_tool import ToolStatus
+from openmontage.tools.graphics import minimax_image
+from openmontage.tools.graphics.minimax_image import MiniMaxImage
+from openmontage.tools.tool_registry import ToolRegistry
 
 
 class FakeResponse:
@@ -90,7 +90,7 @@ def test_cost_estimate_and_result_report_paid_images(
 def test_image_selector_can_route_to_minimax(
     monkeypatch: pytest.MonkeyPatch, tmp_path
 ) -> None:
-    from tools.graphics.image_selector import ImageSelector
+    from openmontage.tools.graphics.image_selector import ImageSelector
 
     monkeypatch.setenv("MINIMAX_API_KEY", "test-key")
     monkeypatch.setattr(

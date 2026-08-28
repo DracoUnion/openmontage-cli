@@ -13,7 +13,7 @@ import os
 from pathlib import Path
 from typing import Optional
 
-from openmontage.utils.paths import project_root, ensure_root_in_path
+from .utils.paths import project_root, ensure_root_in_path
 
 # Re-exported helpers so the rest of the package has a single import point.
 ROOT = project_root()
@@ -28,7 +28,7 @@ def load_env(root: Optional[Path] = None) -> None:
     """Load the project's .env into os.environ (idempotent)."""
     root = root or ROOT
     # OpenMontage's own loader; reuse instead of reinventing it.
-    from lib.env_loader import load_env as om_load_env
+    from .lib.env_loader import load_env as om_load_env
 
     om_load_env(root)
 

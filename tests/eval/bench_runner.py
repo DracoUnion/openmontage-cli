@@ -365,7 +365,7 @@ def run_bench(scenarios: list[BenchScenario], verbose: bool = False) -> list[Ben
         # --- Slideshow risk ---
         if sc.expected_slideshow_verdict is not None:
             try:
-                from lib.slideshow_risk import score_slideshow_risk
+                from openmontage.lib.slideshow_risk import score_slideshow_risk
                 risk = score_slideshow_risk(
                     sc.scenes, sc.edit_decisions, sc.renderer_family, sc.render_runtime
                 )
@@ -389,7 +389,7 @@ def run_bench(scenarios: list[BenchScenario], verbose: bool = False) -> list[Ben
         # --- Variation checker ---
         if sc.expected_variation_verdict is not None and sc.scenes:
             try:
-                from lib.variation_checker import check_scene_variation
+                from openmontage.lib.variation_checker import check_scene_variation
                 var = check_scene_variation(sc.scenes)
                 actual = var["verdict"]
                 ok = _verdict_matches(sc.expected_variation_verdict, actual)
@@ -411,7 +411,7 @@ def run_bench(scenarios: list[BenchScenario], verbose: bool = False) -> list[Ben
         # --- Delivery promise ---
         if sc.expected_promise_valid is not None and sc.delivery_promise:
             try:
-                from lib.delivery_promise import DeliveryPromise
+                from openmontage.lib.delivery_promise import DeliveryPromise
                 promise = DeliveryPromise.from_dict(sc.delivery_promise)
                 validation = promise.validate_cuts(sc.cuts)
                 ok = validation["valid"] == sc.expected_promise_valid

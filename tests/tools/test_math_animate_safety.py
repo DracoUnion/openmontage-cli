@@ -14,7 +14,7 @@ import pytest
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.graphics.math_animate import MathAnimate  # noqa: E402
+from openmontage.tools.graphics.math_animate import MathAnimate  # noqa: E402
 
 SAFE_SCENE = (
     "from manim import *\n"

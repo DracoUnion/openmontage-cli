@@ -14,9 +14,9 @@ import pytest
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.base_tool import BaseTool, ToolStatus, ToolTier, ToolRuntime
-from tools.tool_registry import ToolRegistry
-from tools.audio.azure_tts import AzureTTS
+from openmontage.tools.base_tool import BaseTool, ToolStatus, ToolTier, ToolRuntime
+from openmontage.tools.tool_registry import ToolRegistry
+from openmontage.tools.audio.azure_tts import AzureTTS
 
 
 FAKE_MP3 = b"\xff\xfb\x90\x00" + b"\x00" * 64
@@ -218,7 +218,7 @@ class TestExecute:
 
     def test_selector_adapts_shared_controls_for_azure(self, azure_env, tmp_path, monkeypatch):
         import requests
-        from tools.audio.tts_selector import TTSSelector
+        from openmontage.tools.audio.tts_selector import TTSSelector
 
         captured = {}
 

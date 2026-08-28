@@ -7,11 +7,11 @@ import json
 import subprocess
 from pathlib import Path
 
-from tools.base_tool import ToolResult
-from tools.graphics.threejs_world import ThreeJSWorld
-from tools.tool_registry import ToolRegistry
-from tools.video.hyperframes_compose import HyperFramesCompose
-from tools.video.video_compose import VideoCompose
+from openmontage.tools.base_tool import ToolResult
+from openmontage.tools.graphics.threejs_world import ThreeJSWorld
+from openmontage.tools.tool_registry import ToolRegistry
+from openmontage.tools.video.hyperframes_compose import HyperFramesCompose
+from openmontage.tools.video.video_compose import VideoCompose
 
 
 def _world_spec(duration: float = 12.0) -> dict:

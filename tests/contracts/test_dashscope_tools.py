@@ -12,7 +12,7 @@ from pathlib import Path
 
 import pytest
 
-from tools.base_tool import (
+from openmontage.tools.base_tool import (
     BaseTool,
     ExecutionMode,
     ToolRuntime,
@@ -20,9 +20,9 @@ from tools.base_tool import (
     ToolStatus,
     ToolTier,
 )
-from tools.graphics.dashscope_image import DashscopeImage
-from tools.audio.dashscope_tts import DashscopeTTS
-from tools.analysis.dashscope_asr import DashscopeAsr
+from openmontage.tools.graphics.dashscope_image import DashscopeImage
+from openmontage.tools.audio.dashscope_tts import DashscopeTTS
+from openmontage.tools.analysis.dashscope_asr import DashscopeAsr
 
 TOOLS = [DashscopeImage, DashscopeTTS, DashscopeAsr]
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
@@ -683,7 +683,7 @@ class TestDashscopeAsrSpecific:
 class TestDashscopeRegistryDiscovery:
 
     def test_all_three_tools_discoverable(self):
-        from tools.tool_registry import ToolRegistry
+        from openmontage.tools.tool_registry import ToolRegistry
         registry = ToolRegistry()
         registry.discover()
         dashscope_tools = [
@@ -695,7 +695,7 @@ class TestDashscopeRegistryDiscovery:
 
     def test_image_selector_finds_dashscope(self):
         """image_selector should auto-discover dashscope_image by capability."""
-        from tools.graphics.image_selector import ImageSelector
+        from openmontage.tools.graphics.image_selector import ImageSelector
         selector = ImageSelector()
         # Selector discovers providers by capability="image_generation"
         # dashscope_image has that capability, so it should be routable
@@ -703,6 +703,6 @@ class TestDashscopeRegistryDiscovery:
 
     def test_tts_selector_finds_dashscope(self):
         """tts_selector should auto-discover dashscope_tts by capability."""
-        from tools.audio.tts_selector import TTSSelector
+        from openmontage.tools.audio.tts_selector import TTSSelector
         selector = TTSSelector()
         assert DashscopeTTS().capability == "tts"

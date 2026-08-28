@@ -8,7 +8,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.audio.kling_tts import KlingTTS
+from openmontage.tools.audio.kling_tts import KlingTTS
 
 
 def test_registry_discovers_kling_tts(monkeypatch, isolated_tool_registry):
@@ -155,7 +155,7 @@ def test_tts_selector_prefers_kling_official(monkeypatch, isolated_tool_registry
     isolated_tool_registry.discover("tools")
 
     def fake_execute(self, inputs):
-        from tools.base_tool import ToolResult
+        from openmontage.tools.base_tool import ToolResult
 
         return ToolResult(success=True, data={"output_path": "out.mp3"}, artifacts=["out.mp3"])
 

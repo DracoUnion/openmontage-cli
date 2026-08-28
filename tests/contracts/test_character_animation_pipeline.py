@@ -8,10 +8,10 @@ import pytest
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from lib.pipeline_loader import get_required_tools, get_stage_order, load_pipeline
-from schemas.artifacts import ARTIFACT_NAMES, validate_artifact
-from tools.base_tool import ToolResult
-from tools.character.character_animation import (
+from openmontage.lib.pipeline_loader import get_required_tools, get_stage_order, load_pipeline
+from openmontage.schemas.artifacts import ARTIFACT_NAMES, validate_artifact
+from openmontage.tools.base_tool import ToolResult
+from openmontage.tools.character.character_animation import (
     ActionTimelineCompiler,
     CharacterAnimationReviewer,
     CharacterRigRenderer,
@@ -19,9 +19,9 @@ from tools.character.character_animation import (
     PoseLibraryBuilder,
     SvgRigBuilder,
 )
-from tools.tool_registry import registry
-from tools.video.hyperframes_compose import HyperFramesCompose
-from tools.video.video_compose import VideoCompose
+from openmontage.tools.tool_registry import registry
+from openmontage.tools.video.hyperframes_compose import HyperFramesCompose
+from openmontage.tools.video.video_compose import VideoCompose
 
 
 def test_character_animation_manifest_contract():

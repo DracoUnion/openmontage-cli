@@ -14,8 +14,8 @@ from unittest.mock import patch
 
 import pytest
 
-from tools.audio.fish_audio_tts import FishAudioTTS
-from tools.base_tool import ToolStatus
+from openmontage.tools.audio.fish_audio_tts import FishAudioTTS
+from openmontage.tools.base_tool import ToolStatus
 
 
 class _FakeResponse:
@@ -129,7 +129,7 @@ class TestSelectorRouting:
 
         A normal selector call with preferred_provider=fish_audio must succeed.
         """
-        from tools.audio.tts_selector import TTSSelector
+        from openmontage.tools.audio.tts_selector import TTSSelector
 
         out = tmp_path / "selector.mp3"
         with patch("requests.post", return_value=_FakeResponse(b"SELECTED")) as mock_post:

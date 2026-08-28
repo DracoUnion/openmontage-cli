@@ -10,10 +10,10 @@ than the schema promised — a Decision-Communication / cost-accuracy violation.
 
 import pytest
 
-import tools.video.higgsfield_video as higgsfield_video
-import tools.video.runway_video as runway_video
-from tools.video.higgsfield_video import HiggsFieldVideo
-from tools.video.runway_video import RunwayVideo
+import openmontage.tools.video.higgsfield_video as higgsfield_video
+import openmontage.tools.video.runway_video as runway_video
+from openmontage.tools.video.higgsfield_video import HiggsFieldVideo
+from openmontage.tools.video.runway_video import RunwayVideo
 
 
 @pytest.mark.parametrize(

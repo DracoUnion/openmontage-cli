@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from unittest.mock import MagicMock, patch
 
-from tools.audio.fal_elevenlabs_music import FalElevenLabsMusic
-from tools.base_tool import ToolStatus
-from tools.tool_registry import ToolRegistry
+from openmontage.tools.audio.fal_elevenlabs_music import FalElevenLabsMusic
+from openmontage.tools.base_tool import ToolStatus
+from openmontage.tools.tool_registry import ToolRegistry
 
 
 def _response(*, json_data=None, content=b""):

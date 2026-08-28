@@ -78,7 +78,7 @@ def main(argv: list[str] | None = None) -> int:
 
     # Stage the project into remotion-composer so webpack resolves node_modules.
     sys.path.insert(0, str(REPO_ROOT))
-    from tools.video.video_compose import VideoCompose  # noqa: E402
+    from openmontage.tools.video.video_compose import VideoCompose  # noqa: E402
     staged_entry = VideoCompose()._stage_atelier_project(entry, COMPOSER_DIR)
 
     snap_dir = proj / "snapshots"

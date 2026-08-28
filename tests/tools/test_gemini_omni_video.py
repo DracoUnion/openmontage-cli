@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-from tools.base_tool import ToolStatus
+from openmontage.tools.base_tool import ToolStatus
 
 
 class FakeResponse:
@@ -57,7 +57,7 @@ def gemini_env(monkeypatch):
 
 
 def test_gemini_omni_is_discovered_as_video_provider():
-    from tools.tool_registry import ToolRegistry
+    from openmontage.tools.tool_registry import ToolRegistry
 
     registry = ToolRegistry()
     registry.discover()
@@ -76,14 +76,14 @@ def test_gemini_omni_is_discovered_as_video_provider():
 
 
 def test_gemini_omni_is_routed_by_video_selector():
-    from tools.video.video_selector import VideoSelector
+    from openmontage.tools.video.video_selector import VideoSelector
 
     provider_names = [t.name for t in VideoSelector()._providers()]
     assert "gemini_omni_video" in provider_names
 
 
 def test_gemini_omni_status_tracks_google_api_keys(monkeypatch):
-    from tools.video.gemini_omni_video import GeminiOmniVideo
+    from openmontage.tools.video.gemini_omni_video import GeminiOmniVideo
 
     monkeypatch.delenv("GEMINI_API_KEY", raising=False)
     monkeypatch.delenv("GOOGLE_API_KEY", raising=False)
@@ -94,7 +94,7 @@ def test_gemini_omni_status_tracks_google_api_keys(monkeypatch):
 
 
 def test_gemini_omni_cost_estimate_clamps_duration_hint(gemini_env):
-    from tools.video.gemini_omni_video import GeminiOmniVideo
+    from openmontage.tools.video.gemini_omni_video import GeminiOmniVideo
 
     tool = GeminiOmniVideo()
     assert tool.estimate_cost({"prompt": "x"}) == pytest.approx(0.80)
@@ -103,7 +103,7 @@ def test_gemini_omni_cost_estimate_clamps_duration_hint(gemini_env):
 
 
 def test_gemini_omni_text_to_video_via_uri_delivery(monkeypatch, tmp_path, gemini_env):
-    from tools.video.gemini_omni_video import GeminiOmniVideo
+    from openmontage.tools.video.gemini_omni_video import GeminiOmniVideo
 
     calls = _install_fake_requests(
         monkeypatch,
@@ -141,7 +141,7 @@ def test_gemini_omni_text_to_video_via_uri_delivery(monkeypatch, tmp_path, gemin
 
 def test_gemini_omni_uri_delivery_handles_full_download_url(monkeypatch, tmp_path, gemini_env):
     """The API may return a full .../files/<id>:download?alt=media URL, not just files/<id>."""
-    from tools.video.gemini_omni_video import GeminiOmniVideo
+    from openmontage.tools.video.gemini_omni_video import GeminiOmniVideo
 
     full_url = (
         "https://generativelanguage.googleapis.com/v1beta/files/vid-456:download?alt=media"
@@ -175,13 +175,13 @@ def test_gemini_omni_uri_delivery_handles_full_download_url(monkeypatch, tmp_pat
     ],
 )
 def test_gemini_omni_file_id_extraction_covers_documented_uri_shapes(uri):
-    from tools.video.gemini_omni_video import GeminiOmniVideo
+    from openmontage.tools.video.gemini_omni_video import GeminiOmniVideo
 
     assert GeminiOmniVideo._file_id_from_uri(uri) == "vid-456"
 
 
 def test_gemini_omni_inline_data_response_is_handled(monkeypatch, tmp_path, gemini_env):
-    from tools.video.gemini_omni_video import GeminiOmniVideo
+    from openmontage.tools.video.gemini_omni_video import GeminiOmniVideo
 
     inline = base64.b64encode(b"inline mp4").decode("ascii")
     calls = _install_fake_requests(
@@ -199,7 +199,7 @@ def test_gemini_omni_inline_data_response_is_handled(monkeypatch, tmp_path, gemi
 
 
 def test_gemini_omni_edit_turn_sends_previous_interaction_id(monkeypatch, tmp_path, gemini_env):
-    from tools.video.gemini_omni_video import GeminiOmniVideo
+    from openmontage.tools.video.gemini_omni_video import GeminiOmniVideo
 
     inline = base64.b64encode(b"edited mp4").decode("ascii")
     calls = _install_fake_requests(
@@ -222,7 +222,7 @@ def test_gemini_omni_edit_turn_sends_previous_interaction_id(monkeypatch, tmp_pa
 
 
 def test_gemini_omni_edit_without_source_is_rejected(gemini_env):
-    from tools.video.gemini_omni_video import GeminiOmniVideo
+    from openmontage.tools.video.gemini_omni_video import GeminiOmniVideo
 
     result = GeminiOmniVideo().execute({"prompt": "Make it anime", "operation": "edit_video"})
     assert not result.success
@@ -230,7 +230,7 @@ def test_gemini_omni_edit_without_source_is_rejected(gemini_env):
 
 
 def test_gemini_omni_image_to_video_sends_typed_parts(monkeypatch, tmp_path, gemini_env):
-    from tools.video.gemini_omni_video import GeminiOmniVideo
+    from openmontage.tools.video.gemini_omni_video import GeminiOmniVideo
 
     ref = tmp_path / "cat.png"
     ref.write_bytes(b"png bytes")
@@ -259,7 +259,7 @@ def test_gemini_omni_image_to_video_sends_typed_parts(monkeypatch, tmp_path, gem
 
 
 def test_gemini_omni_image_to_video_requires_reference(gemini_env):
-    from tools.video.gemini_omni_video import GeminiOmniVideo
+    from openmontage.tools.video.gemini_omni_video import GeminiOmniVideo
 
     result = GeminiOmniVideo().execute({"prompt": "x", "operation": "image_to_video"})
     assert not result.success
@@ -267,7 +267,7 @@ def test_gemini_omni_image_to_video_requires_reference(gemini_env):
 
 
 def test_gemini_omni_store_false_marks_result_not_editable(monkeypatch, tmp_path, gemini_env):
-    from tools.video.gemini_omni_video import GeminiOmniVideo
+    from openmontage.tools.video.gemini_omni_video import GeminiOmniVideo
 
     inline = base64.b64encode(b"oneshot mp4").decode("ascii")
     calls = _install_fake_requests(

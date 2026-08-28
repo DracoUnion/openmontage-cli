@@ -27,13 +27,13 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 
-from lib.env_loader import load_env  # noqa: E402
+from openmontage.lib.env_loader import load_env  # noqa: E402
 
 load_env(ROOT)
 
-from lib.pipeline_loader import load_pipeline  # noqa: E402
-from tools.tool_registry import registry  # noqa: E402
-from tools.video.video_compose import VideoCompose  # noqa: E402
+from openmontage.lib.pipeline_loader import load_pipeline  # noqa: E402
+from openmontage.tools.tool_registry import registry  # noqa: E402
+from openmontage.tools.video.video_compose import VideoCompose  # noqa: E402
 
 
 DEFAULT_PROJECT = "kling-animated-explainer-e2e"

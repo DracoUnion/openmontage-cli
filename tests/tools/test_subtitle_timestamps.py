@@ -15,7 +15,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.subtitle.subtitle_gen import SubtitleGen  # noqa: E402
+from openmontage.tools.subtitle.subtitle_gen import SubtitleGen  # noqa: E402
 
 _SRT_RE = re.compile(r"^\d{2}:\d{2}:\d{2},\d{3}$")
 _VTT_RE = re.compile(r"^\d{2}:\d{2}:\d{2}\.\d{3}$")

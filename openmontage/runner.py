@@ -12,8 +12,8 @@ import sys
 from dataclasses import dataclass
 from typing import Any, Optional
 
-from openmontage import config, bridge
-from openmontage.gates import GatePolicy
+from . import config, bridge
+from .gates import GatePolicy
 
 
 def parse_duration(raw: Optional[str]) -> Optional[int]:
@@ -73,7 +73,7 @@ def make(
 
     if om_root:
         os.environ.setdefault("PYTHONPATH", "")
-        from openmontage.utils.paths import project_root as _pr
+        from .utils.paths import project_root as _pr
 
         # Note: bridge modules resolve paths against the live copy at import
         # time; om_root is primarily for .env selection below.
@@ -95,8 +95,8 @@ def make(
 
     helper = _build_helper(pipeline, duration, plan_only, yes)
 
-    from openmontage.llm.providers.openai import OpenAIOrchestrator
-    from openmontage.llm.orchestrator import Orchestrator
+    from .llm.providers.openai import OpenAIOrchestrator
+    from .llm.orchestrator import Orchestrator
 
     provider = OpenAIOrchestrator(
         api_key=config.api_key(),

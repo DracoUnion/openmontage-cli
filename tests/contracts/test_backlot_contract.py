@@ -5,7 +5,7 @@ import json
 
 import pytest
 
-from lib.checkpoint import (
+from openmontage.lib.checkpoint import (
     CANONICAL_STAGE_ARTIFACTS,
     CheckpointValidationError,
     HISTORY_DIRNAME,
@@ -14,7 +14,7 @@ from lib.checkpoint import (
     read_checkpoint,
     write_checkpoint,
 )
-from lib.events import emit_event, infer_project_dir, read_events
+from openmontage.lib.events import emit_event, infer_project_dir, read_events
 
 
 def _minimal_script() -> dict:
@@ -180,7 +180,7 @@ class TestEvents:
         assert [e["ok"] for e in events] == [1, 2]
 
     def test_infer_project_dir_from_output_path(self):
-        from lib.events import PROJECTS_DIR
+        from openmontage.lib.events import PROJECTS_DIR
         target = PROJECTS_DIR / "some-proj" / "assets" / "images" / "x.png"
         assert infer_project_dir({"output_path": str(target)}) == PROJECTS_DIR / "some-proj"
         assert infer_project_dir({"output_path": "C:/elsewhere/x.png"}) is None
@@ -189,10 +189,10 @@ class TestEvents:
 
 class TestBaseToolInstrumentation:
     def test_execute_emits_events(self, tmp_path, monkeypatch):
-        import lib.events as events_mod
+        import openmontage.lib.events as events_mod
         monkeypatch.setattr(events_mod, "PROJECTS_DIR", tmp_path)
 
-        from tools.base_tool import BaseTool, ToolResult
+        from openmontage.tools.base_tool import BaseTool, ToolResult
 
         class FakeTool(BaseTool):
             name = "fake_tool"
@@ -212,10 +212,10 @@ class TestBaseToolInstrumentation:
         assert events[1]["cost_usd"] == 0.05
 
     def test_execute_emits_error_event_and_reraises(self, tmp_path, monkeypatch):
-        import lib.events as events_mod
+        import openmontage.lib.events as events_mod
         monkeypatch.setattr(events_mod, "PROJECTS_DIR", tmp_path)
 
-        from tools.base_tool import BaseTool
+        from openmontage.tools.base_tool import BaseTool
 
         class BoomTool(BaseTool):
             name = "boom_tool"
@@ -232,7 +232,7 @@ class TestBaseToolInstrumentation:
         assert "kaput" in events[1]["error"]
 
     def test_unattributable_call_emits_nothing_and_works(self, tmp_path):
-        from tools.base_tool import BaseTool, ToolResult
+        from openmontage.tools.base_tool import BaseTool, ToolResult
 
         class PlainTool(BaseTool):
             name = "plain_tool"

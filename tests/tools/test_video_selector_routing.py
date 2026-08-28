@@ -23,8 +23,8 @@ from typing import Any
 
 import pytest
 
-from tools.base_tool import ToolResult, ToolStatus
-from tools.video.video_selector import VideoSelector
+from openmontage.tools.base_tool import ToolResult, ToolStatus
+from openmontage.tools.video.video_selector import VideoSelector
 
 
 class _StubTool:

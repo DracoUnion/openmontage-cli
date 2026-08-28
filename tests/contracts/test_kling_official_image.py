@@ -9,7 +9,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.graphics.kling_official_image import KlingOfficialImage
+from openmontage.tools.graphics.kling_official_image import KlingOfficialImage
 
 
 def test_registry_discovers_kling_official_image(monkeypatch, isolated_tool_registry):
@@ -257,7 +257,7 @@ def test_image_selector_prefers_official_provider(monkeypatch, isolated_tool_reg
     isolated_tool_registry.discover("tools")
 
     def fake_execute(self, inputs):
-        from tools.base_tool import ToolResult
+        from openmontage.tools.base_tool import ToolResult
 
         return ToolResult(success=True, data={"output_path": "out.png"}, artifacts=["out.png"])
 

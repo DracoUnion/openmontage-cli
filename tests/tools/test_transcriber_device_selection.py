@@ -1,7 +1,7 @@
 import sys
 from types import SimpleNamespace
 
-from tools.analysis.transcriber import Transcriber
+from openmontage.tools.analysis.transcriber import Transcriber
 
 
 class _Info:

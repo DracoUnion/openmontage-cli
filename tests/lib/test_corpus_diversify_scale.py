@@ -26,7 +26,7 @@ import pytest
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from lib.corpus import EMBED_DIM, ClipRecord, Corpus
+from openmontage.lib.corpus import EMBED_DIM, ClipRecord, Corpus
 
 
 def _corpus(vectors: list[list[float]]) -> Corpus:

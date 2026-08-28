@@ -13,7 +13,7 @@ def test_bg_remove_selects_model_through_rembg_session(monkeypatch, tmp_path) ->
     input_path = tmp_path / "input.png"
     Image.new("RGB", (8, 8), (10, 20, 30)).save(input_path)
 
-    from tools.enhancement.bg_remove import BgRemove
+    from openmontage.tools.enhancement.bg_remove import BgRemove
 
     result = BgRemove().execute({
         "input_path": str(input_path),

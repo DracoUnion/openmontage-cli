@@ -13,10 +13,10 @@ import pytest
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.publishers.export_bundle import ExportBundle
-from tools.base_tool import ToolStatus, ToolTier
-from tools.tool_registry import ToolRegistry
-from schemas.artifacts import validate_artifact
+from openmontage.tools.publishers.export_bundle import ExportBundle
+from openmontage.tools.base_tool import ToolStatus, ToolTier
+from openmontage.tools.tool_registry import ToolRegistry
+from openmontage.schemas.artifacts import validate_artifact
 
 
 def _make_video(path: Path) -> None:

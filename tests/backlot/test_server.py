@@ -16,8 +16,8 @@ import pytest
 from fastapi.testclient import TestClient
 from PIL import Image
 
-from backlot import server as server_mod
-from backlot import state as state_mod
+from openmontage.backlot import server as server_mod
+from openmontage.backlot import state as state_mod
 
 
 @pytest.fixture

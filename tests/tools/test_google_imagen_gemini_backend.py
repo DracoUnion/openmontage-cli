@@ -55,13 +55,13 @@ def imagen_tool(monkeypatch):
     class _FakeClient:
         models = _FakeModels()
 
-    import tools.google_credentials as gc
+    import openmontage.tools.google_credentials as gc
 
     monkeypatch.setattr(
         gc, "get_genai_client", lambda http_options=None, location=None: _FakeClient()
     )
 
-    from tools.graphics.google_imagen import GoogleImagen
+    from openmontage.tools.graphics.google_imagen import GoogleImagen
 
     return GoogleImagen(), calls
 
@@ -93,7 +93,7 @@ def test_image_selector_maps_model_name_to_google_model(
     imagen_tool, monkeypatch, tmp_path
 ):
     """The governed selector must be able to reach the Gemini backend."""
-    from tools.graphics.image_selector import ImageSelector
+    from openmontage.tools.graphics.image_selector import ImageSelector
 
     tool, calls = imagen_tool
     selector = ImageSelector()
@@ -115,7 +115,7 @@ def test_image_selector_maps_model_name_to_google_model(
 
 
 def test_gemini_cost_estimate_is_per_image():
-    from tools.graphics.google_imagen import GoogleImagen
+    from openmontage.tools.graphics.google_imagen import GoogleImagen
 
     tool = GoogleImagen()
     assert tool.estimate_cost(
@@ -136,13 +136,13 @@ def test_text_only_response_is_a_clear_error(monkeypatch, tmp_path):
     class _FakeClient:
         models = _FakeModels()
 
-    import tools.google_credentials as gc
+    import openmontage.tools.google_credentials as gc
 
     monkeypatch.setattr(
         gc, "get_genai_client", lambda http_options=None, location=None: _FakeClient()
     )
 
-    from tools.graphics.google_imagen import GoogleImagen
+    from openmontage.tools.graphics.google_imagen import GoogleImagen
 
     result = GoogleImagen().execute(
         {

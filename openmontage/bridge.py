@@ -18,7 +18,7 @@ import json
 from pathlib import Path
 from typing import Any, Optional
 
-from openmontage.utils.paths import (
+from .utils.paths import (
     project_root,
     ensure_root_in_path,
     projects_dir,
@@ -29,19 +29,19 @@ _ROOT = project_root()
 ensure_root_in_path()
 
 # These imports require the project root already on sys.path (done above).
-from lib.checkpoint import (  # noqa: E402
+from .lib.checkpoint import (  # noqa: E402
     init_project,
     write_checkpoint,
     read_checkpoint,
     get_completed_stages,
     get_next_stage,
 )
-from lib.pipeline_loader import (  # noqa: E402
+from .lib.pipeline_loader import (  # noqa: E402
     load_pipeline,
     list_pipelines,
     get_stage_human_approval_default,
 )
-from tools.tool_registry import registry  # noqa: E402
+from .tools.tool_registry import registry  # noqa: E402
 
 
 def _json_safe(value: Any, depth: int = 0) -> Any:

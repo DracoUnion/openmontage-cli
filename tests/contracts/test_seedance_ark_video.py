@@ -10,8 +10,8 @@ import wave
 
 import pytest
 
-from tools.base_tool import BaseTool, ToolRuntime, ToolStatus
-from tools.video.seedance_ark import SeedanceArkVideo
+from openmontage.tools.base_tool import BaseTool, ToolRuntime, ToolStatus
+from openmontage.tools.video.seedance_ark import SeedanceArkVideo
 
 
 class _FakeResponse:

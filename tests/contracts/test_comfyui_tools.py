@@ -10,19 +10,19 @@ from pathlib import Path
 
 import pytest
 
-from tools.base_tool import (
+from openmontage.tools.base_tool import (
     BaseTool,
     ToolRuntime,
     ToolStability,
     ToolStatus,
     ToolTier,
 )
-from tools.audio.comfyui_music import ComfyUIMusic
-from tools.graphics.comfyui_image import ComfyUIImage
-from tools.graphics.image_selector import ImageSelector
-from tools.tool_registry import ToolRegistry
-from tools.video.video_selector import VideoSelector
-from tools.video.comfyui_video import ComfyUIVideo
+from openmontage.tools.audio.comfyui_music import ComfyUIMusic
+from openmontage.tools.graphics.comfyui_image import ComfyUIImage
+from openmontage.tools.graphics.image_selector import ImageSelector
+from openmontage.tools.tool_registry import ToolRegistry
+from openmontage.tools.video.video_selector import VideoSelector
+from openmontage.tools.video.comfyui_video import ComfyUIVideo
 
 TOOLS = [ComfyUIImage, ComfyUIVideo, ComfyUIMusic]
 WORKFLOW_DIR = Path(__file__).resolve().parent.parent.parent / "tools" / "_comfyui" / "workflows"
@@ -183,7 +183,7 @@ def test_t2v_workflow_uses_14b_compatible_vae():
 
 
 def test_t2v_metadata_stack_uses_14b_compatible_vae():
-    from tools._comfyui.metadata import BUNDLED_MODEL_STACKS
+    from openmontage.tools._comfyui.metadata import BUNDLED_MODEL_STACKS
 
     vae_entry = next(item for item in BUNDLED_MODEL_STACKS["wan22-t2v-4step"] if item["role"] == "vae")
     assert vae_entry["name"] == "wan_2.1_vae.safetensors"
@@ -197,13 +197,13 @@ def test_t2v_metadata_stack_uses_14b_compatible_vae():
 class TestClientHelpers:
 
     def test_load_workflow(self):
-        from tools._comfyui.client import ComfyUIClient
+        from openmontage.tools._comfyui.client import ComfyUIClient
         w = ComfyUIClient.load_workflow(WORKFLOW_DIR / "flux2-txt2img.json")
         assert isinstance(w, dict)
         assert "1" in w
 
     def test_patch_workflow(self):
-        from tools._comfyui.client import ComfyUIClient
+        from openmontage.tools._comfyui.client import ComfyUIClient
         w = ComfyUIClient.load_workflow(WORKFLOW_DIR / "flux2-txt2img.json")
         patched = ComfyUIClient.patch_workflow(w, {
             "4": {"text": "hello world"},
@@ -215,13 +215,13 @@ class TestClientHelpers:
         assert w["4"]["inputs"]["text"] == ""
 
     def test_patch_workflow_bad_node(self):
-        from tools._comfyui.client import ComfyUIClient, ComfyUIError
+        from openmontage.tools._comfyui.client import ComfyUIClient, ComfyUIError
         w = {"1": {"inputs": {"x": 1}}}
         with pytest.raises(ComfyUIError, match="not found"):
             ComfyUIClient.patch_workflow(w, {"99": {"x": 2}})
 
     def test_submit_surfaces_node_errors_before_http_error(self, monkeypatch):
-        from tools._comfyui.client import ComfyUIClient, ComfyUIError
+        from openmontage.tools._comfyui.client import ComfyUIClient, ComfyUIError
 
         class FakeResponse:
             status_code = 400
@@ -244,13 +244,13 @@ class TestClientHelpers:
             ComfyUIClient("http://comfy.test").submit({})
 
     def test_random_seed_range(self):
-        from tools._comfyui.client import ComfyUIClient
+        from openmontage.tools._comfyui.client import ComfyUIClient
         for _ in range(100):
             s = ComfyUIClient.random_seed()
             assert 0 <= s < 2**32
 
     def test_generate_passes_history_item_type_to_view(self, monkeypatch, tmp_path):
-        from tools._comfyui.client import ComfyUIClient
+        from openmontage.tools._comfyui.client import ComfyUIClient
 
         client = ComfyUIClient("http://comfy.test")
         seen = {}
@@ -285,7 +285,7 @@ class TestClientHelpers:
         }
 
     def test_poll_timeout_carries_prompt_id_for_recovery(self, monkeypatch):
-        from tools._comfyui.client import ComfyUIClient, ComfyUIError
+        from openmontage.tools._comfyui.client import ComfyUIClient, ComfyUIError
 
         client = ComfyUIClient("http://comfy.test")
         monkeypatch.setattr(
@@ -304,7 +304,7 @@ class TestClientHelpers:
         assert "prompt-timeout-1" in str(excinfo.value)
 
     def test_generate_resume_prompt_id_skips_resubmit(self, monkeypatch, tmp_path):
-        from tools._comfyui.client import ComfyUIClient
+        from openmontage.tools._comfyui.client import ComfyUIClient
         import sys
 
         client = ComfyUIClient("http://comfy.test")
@@ -337,7 +337,7 @@ class TestClientHelpers:
     def test_generate_reads_audio_key_from_savaudio_node(self, monkeypatch, tmp_path):
         """The native SaveAudio node writes outputs under "audio", not
         "images"/"gifs" -- comfyui_music depends on this being handled."""
-        from tools._comfyui.client import ComfyUIClient
+        from openmontage.tools._comfyui.client import ComfyUIClient
 
         client = ComfyUIClient("http://comfy.test")
         monkeypatch.setattr(client, "submit", lambda workflow: "p1")
@@ -352,19 +352,19 @@ class TestClientHelpers:
         assert paths == [tmp_path / "out.flac"]
 
     def test_is_default_url_when_env_not_set(self, monkeypatch):
-        from tools._comfyui.client import ComfyUIClient
+        from openmontage.tools._comfyui.client import ComfyUIClient
         monkeypatch.delenv("COMFYUI_SERVER_URL", raising=False)
         client = ComfyUIClient()
         assert client.is_default_url is True
 
     def test_is_not_default_url_when_env_set(self, monkeypatch):
-        from tools._comfyui.client import ComfyUIClient
+        from openmontage.tools._comfyui.client import ComfyUIClient
         monkeypatch.setenv("COMFYUI_SERVER_URL", "http://myhost:9999")
         client = ComfyUIClient()
         assert client.is_default_url is False
 
     def test_unavailable_reason_default_url(self, monkeypatch):
-        from tools._comfyui.client import ComfyUIClient
+        from openmontage.tools._comfyui.client import ComfyUIClient
         monkeypatch.delenv("COMFYUI_SERVER_URL", raising=False)
         client = ComfyUIClient()
         msg = client.unavailable_reason()
@@ -372,7 +372,7 @@ class TestClientHelpers:
         assert ".env" in msg
 
     def test_unavailable_reason_custom_url(self, monkeypatch):
-        from tools._comfyui.client import ComfyUIClient
+        from openmontage.tools._comfyui.client import ComfyUIClient
         monkeypatch.setenv("COMFYUI_SERVER_URL", "http://myhost:9999")
         client = ComfyUIClient()
         msg = client.unavailable_reason()
@@ -380,7 +380,7 @@ class TestClientHelpers:
         assert "COMFYUI_SERVER_URL" not in msg
 
     def test_submit_includes_client_id_for_websocket_targeting(self, monkeypatch):
-        from tools._comfyui.client import ComfyUIClient
+        from openmontage.tools._comfyui.client import ComfyUIClient
 
         client = ComfyUIClient("http://comfy.test")
         seen = {}
@@ -400,7 +400,7 @@ class TestClientHelpers:
 class TestMultiServer:
 
     def test_capability_env_var_takes_priority_over_shared(self, monkeypatch):
-        from tools._comfyui.client import ComfyUIClient
+        from openmontage.tools._comfyui.client import ComfyUIClient
 
         monkeypatch.setenv("COMFYUI_SERVER_URL", "http://shared:8188")
         monkeypatch.setenv("COMFYUI_VIDEO_SERVER_URL", "http://video-gpu:8188")
@@ -408,7 +408,7 @@ class TestMultiServer:
         assert client.server_url == "http://video-gpu:8188"
 
     def test_falls_back_to_shared_when_capability_var_unset(self, monkeypatch):
-        from tools._comfyui.client import ComfyUIClient
+        from openmontage.tools._comfyui.client import ComfyUIClient
 
         monkeypatch.setenv("COMFYUI_SERVER_URL", "http://shared:8188")
         monkeypatch.delenv("COMFYUI_IMAGE_SERVER_URL", raising=False)
@@ -416,7 +416,7 @@ class TestMultiServer:
         assert client.server_url == "http://shared:8188"
 
     def test_other_capability_env_var_does_not_leak_across_tools(self, monkeypatch):
-        from tools._comfyui.client import ComfyUIClient
+        from openmontage.tools._comfyui.client import ComfyUIClient
 
         monkeypatch.delenv("COMFYUI_SERVER_URL", raising=False)
         monkeypatch.setenv("COMFYUI_IMAGE_SERVER_URL", "http://image-gpu:8188")
@@ -425,14 +425,14 @@ class TestMultiServer:
         assert video_client.server_url == "http://localhost:8188"
 
     def test_explicit_server_url_wins_over_capability_env_var(self, monkeypatch):
-        from tools._comfyui.client import ComfyUIClient
+        from openmontage.tools._comfyui.client import ComfyUIClient
 
         monkeypatch.setenv("COMFYUI_VIDEO_SERVER_URL", "http://video-gpu:8188")
         client = ComfyUIClient("http://explicit:1234", capability="video")
         assert client.server_url == "http://explicit:1234"
 
     def test_no_capability_behaves_as_before(self, monkeypatch):
-        from tools._comfyui.client import ComfyUIClient
+        from openmontage.tools._comfyui.client import ComfyUIClient
 
         monkeypatch.setenv("COMFYUI_SERVER_URL", "http://shared:8188")
         client = ComfyUIClient()
@@ -440,7 +440,7 @@ class TestMultiServer:
         assert client.is_default_url is False
 
     def test_is_default_url_true_only_when_both_vars_unset(self, monkeypatch):
-        from tools._comfyui.client import ComfyUIClient
+        from openmontage.tools._comfyui.client import ComfyUIClient
 
         monkeypatch.delenv("COMFYUI_SERVER_URL", raising=False)
         monkeypatch.delenv("COMFYUI_IMAGE_SERVER_URL", raising=False)
@@ -452,7 +452,7 @@ class TestMultiServer:
         assert client2.is_default_url is False
 
     def test_unavailable_reason_mentions_capability_and_shared_var(self, monkeypatch):
-        from tools._comfyui.client import ComfyUIClient
+        from openmontage.tools._comfyui.client import ComfyUIClient
 
         monkeypatch.delenv("COMFYUI_SERVER_URL", raising=False)
         monkeypatch.delenv("COMFYUI_VIDEO_SERVER_URL", raising=False)
@@ -462,8 +462,8 @@ class TestMultiServer:
         assert "COMFYUI_SERVER_URL" in msg
 
     def test_image_and_video_tools_use_independent_servers(self, monkeypatch):
-        from tools.graphics.comfyui_image import ComfyUIImage
-        from tools.video.comfyui_video import ComfyUIVideo
+        from openmontage.tools.graphics.comfyui_image import ComfyUIImage
+        from openmontage.tools.video.comfyui_video import ComfyUIVideo
 
         monkeypatch.delenv("COMFYUI_SERVER_URL", raising=False)
         monkeypatch.setenv("COMFYUI_IMAGE_SERVER_URL", "http://image-gpu:8188")
@@ -512,7 +512,7 @@ def _install_fake_websocket(monkeypatch, frames):
 class TestWebsocketWait:
 
     def test_wait_ws_returns_job_completed_before_connection(self, monkeypatch):
-        from tools._comfyui.client import ComfyUIClient
+        from openmontage.tools._comfyui.client import ComfyUIClient
         import sys
 
         client = ComfyUIClient("http://comfy.test")
@@ -535,7 +535,7 @@ class TestWebsocketWait:
         assert client.wait_ws("done", timeout=5) == {"outputs": {"9": {}}}
 
     def test_wait_ws_completes_on_executing_none_node(self, monkeypatch, tmp_path):
-        from tools._comfyui.client import ComfyUIClient
+        from openmontage.tools._comfyui.client import ComfyUIClient
 
         client = ComfyUIClient("http://comfy.test")
         progress_events = []
@@ -563,7 +563,7 @@ class TestWebsocketWait:
         assert progress_events == [{"value": 2, "max": 20, "prompt_id": "p1"}]
 
     def test_wait_ws_execution_error_raises_with_prompt_id(self, monkeypatch):
-        from tools._comfyui.client import ComfyUIClient, ComfyUIError
+        from openmontage.tools._comfyui.client import ComfyUIClient, ComfyUIError
 
         client = ComfyUIClient("http://comfy.test")
         frames = [
@@ -579,7 +579,7 @@ class TestWebsocketWait:
         assert excinfo.value.prompt_id == "p2"
 
     def test_wait_ws_ignores_other_prompts_on_shared_connection(self, monkeypatch):
-        from tools._comfyui.client import ComfyUIClient
+        from openmontage.tools._comfyui.client import ComfyUIClient
 
         client = ComfyUIClient("http://comfy.test")
         frames = [
@@ -604,7 +604,7 @@ class TestWebsocketWait:
         assert entry == {"outputs": {}}
 
     def test_wait_ws_timeout_raises_comfyuierror_with_prompt_id(self, monkeypatch):
-        from tools._comfyui.client import ComfyUIClient, ComfyUIError
+        from openmontage.tools._comfyui.client import ComfyUIClient, ComfyUIError
 
         client = ComfyUIClient("http://comfy.test")
         _install_fake_websocket(monkeypatch, frames=[])  # recv() always times out
@@ -617,7 +617,7 @@ class TestWebsocketWait:
     def test_wait_falls_back_to_poll_when_websocket_unavailable(self, monkeypatch):
         """No websocket-client installed (or any transport failure) must
         silently fall back to REST polling, not blow up the whole call."""
-        from tools._comfyui.client import ComfyUIClient
+        from openmontage.tools._comfyui.client import ComfyUIClient
         import sys
 
         client = ComfyUIClient("http://comfy.test")
@@ -636,7 +636,7 @@ class TestWebsocketWait:
     def test_wait_does_not_swallow_genuine_comfyuierror_from_websocket(self, monkeypatch):
         """A real execution error detected over the websocket must propagate,
         not be masked by a fallback-to-poll retry."""
-        from tools._comfyui.client import ComfyUIClient, ComfyUIError
+        from openmontage.tools._comfyui.client import ComfyUIClient, ComfyUIError
 
         client = ComfyUIClient("http://comfy.test")
         frames = [
@@ -671,22 +671,22 @@ def _raise_on_websocket_import(real_import):
 class TestModelRequirements:
 
     def test_image_tool_has_required_models(self):
-        from tools.graphics.comfyui_image import _REQUIRED_MODELS
+        from openmontage.tools.graphics.comfyui_image import _REQUIRED_MODELS
         assert len(_REQUIRED_MODELS) > 0
         assert any("flux" in m.lower() for m in _REQUIRED_MODELS)
 
     def test_video_tool_has_required_models_i2v(self):
-        from tools.video.comfyui_video import _REQUIRED_MODELS_I2V
+        from openmontage.tools.video.comfyui_video import _REQUIRED_MODELS_I2V
         assert len(_REQUIRED_MODELS_I2V) > 0
         assert any("i2v" in m.lower() for m in _REQUIRED_MODELS_I2V)
 
     def test_video_tool_has_required_models_t2v(self):
-        from tools.video.comfyui_video import _REQUIRED_MODELS_T2V
+        from openmontage.tools.video.comfyui_video import _REQUIRED_MODELS_T2V
         assert len(_REQUIRED_MODELS_T2V) > 0
         assert any("t2v" in m.lower() for m in _REQUIRED_MODELS_T2V)
 
     def test_music_tool_has_required_models(self):
-        from tools.audio.comfyui_music import _REQUIRED_MODELS
+        from openmontage.tools.audio.comfyui_music import _REQUIRED_MODELS
         assert len(_REQUIRED_MODELS) > 0
         assert any("ace_step" in m.lower() for m in _REQUIRED_MODELS)
 
@@ -777,7 +777,7 @@ class TestCustomWorkflowContract:
         assert provenance["model_stack_source"] == "caller_supplied"
 
     def test_video_timeout_surfaces_resumable_prompt_id(self, tmp_path):
-        from tools._comfyui.client import ComfyUIError
+        from openmontage.tools._comfyui.client import ComfyUIError
 
         tool = ComfyUIVideo()
         tool._client.is_available = lambda: True
@@ -1045,7 +1045,7 @@ class TestComfyUIMusic:
         assert provenance["workflow_hash_sha256"]
 
     def test_timeout_surfaces_resumable_prompt_id(self, tmp_path):
-        from tools._comfyui.client import ComfyUIError
+        from openmontage.tools._comfyui.client import ComfyUIError
 
         tool = ComfyUIMusic()
         tool._client.is_available = lambda: True
@@ -1130,7 +1130,7 @@ class TestComfyUISetupOffer:
 class TestVideoOperationReadiness:
 
     def test_video_tool_reports_partial_operation_readiness(self):
-        from tools.video.comfyui_video import _REQUIRED_MODELS_I2V, _REQUIRED_MODELS_T2V
+        from openmontage.tools.video.comfyui_video import _REQUIRED_MODELS_I2V, _REQUIRED_MODELS_T2V
 
         tool = ComfyUIVideo()
         tool._client.is_available = lambda: True

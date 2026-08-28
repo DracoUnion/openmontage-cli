@@ -50,7 +50,7 @@ def imagen_tool(monkeypatch):
     fake.post = _post
     monkeypatch.setitem(sys.modules, "requests", fake)
     monkeypatch.setenv("GOOGLE_API_KEY", "test-key")
-    from tools.graphics.google_imagen import GoogleImagen
+    from openmontage.tools.graphics.google_imagen import GoogleImagen
 
     return GoogleImagen()
 
@@ -97,7 +97,7 @@ def test_single_image_keeps_exact_output_path(imagen_tool, tmp_path):
 
 
 def test_multi_output_paths_are_suffixed_and_unique():
-    from tools.graphics.google_imagen import GoogleImagen
+    from openmontage.tools.graphics.google_imagen import GoogleImagen
 
     paths = GoogleImagen._output_paths("/tmp/art/pic.png", 3)
     assert [p.name for p in paths] == ["pic_1.png", "pic_2.png", "pic_3.png"]

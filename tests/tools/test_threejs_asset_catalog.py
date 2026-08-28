@@ -2,7 +2,7 @@ import json
 import zipfile
 from pathlib import Path
 
-from tools.graphics.threejs_asset_catalog import CATALOGS, ThreeJSAssetCatalog
+from openmontage.tools.graphics.threejs_asset_catalog import CATALOGS, ThreeJSAssetCatalog
 
 
 def test_catalog_list_is_rights_explicit():

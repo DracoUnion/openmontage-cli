@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from unittest.mock import MagicMock, patch
 
-from tools.audio.fal_elevenlabs_tts import FalElevenLabsTTS
-from tools.base_tool import ToolStatus
-from tools.tool_registry import ToolRegistry
+from openmontage.tools.audio.fal_elevenlabs_tts import FalElevenLabsTTS
+from openmontage.tools.base_tool import ToolStatus
+from openmontage.tools.tool_registry import ToolRegistry
 
 
 def _response(*, json_data=None, content=b""):
@@ -38,8 +38,8 @@ def test_registry_discovers_fal_tts(monkeypatch):
 
 
 def test_tts_selector_routes_to_fal_provider(monkeypatch):
-    from tools.audio.tts_selector import TTSSelector
-    from tools.base_tool import ToolResult
+    from openmontage.tools.audio.tts_selector import TTSSelector
+    from openmontage.tools.base_tool import ToolResult
 
     monkeypatch.setenv("FAL_KEY", "test-key")
     tool = FalElevenLabsTTS()

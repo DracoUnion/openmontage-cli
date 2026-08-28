@@ -1,10 +1,10 @@
 """Pixabay rejects per_page outside 3-200 with HTTP 400, so every
 Pixabay caller must clamp before building the request."""
 
-from tools.graphics.pixabay_image import PixabayImage
-from tools.video.pixabay_video import PixabayVideo
-from tools.video.stock_sources.base import SearchFilters
-from tools.video.stock_sources.pixabay_video import PixabayVideoSource
+from openmontage.tools.graphics.pixabay_image import PixabayImage
+from openmontage.tools.video.pixabay_video import PixabayVideo
+from openmontage.tools.video.stock_sources.base import SearchFilters
+from openmontage.tools.video.stock_sources.pixabay_video import PixabayVideoSource
 
 
 class _FakeResponse:

@@ -1,5 +1,5 @@
-from tools.audio.google_tts import GoogleTTS
-from tools.google_credentials import has_google_credentials
+from openmontage.tools.audio.google_tts import GoogleTTS
+from openmontage.tools.google_credentials import has_google_credentials
 
 
 def test_tts_only_key_does_not_enable_shared_google_providers(monkeypatch):

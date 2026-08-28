@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from tools.tool_registry import ToolRegistry
+from openmontage.tools.tool_registry import ToolRegistry
 
 
 @pytest.fixture()

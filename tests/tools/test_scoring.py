@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from lib.scoring import _tokenize_text, score_provider
-from tools.base_tool import ToolStatus
+from openmontage.lib.scoring import _tokenize_text, score_provider
+from openmontage.tools.base_tool import ToolStatus
 
 
 class _FakeVideoTool:

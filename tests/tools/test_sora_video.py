@@ -10,14 +10,14 @@ from pathlib import Path
 
 import pytest
 
-from tools.base_tool import ToolStatus
+from openmontage.tools.base_tool import ToolStatus
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
 
 def test_sora_video_is_discovered_as_openai_video_provider():
-    from tools.tool_registry import ToolRegistry
+    from openmontage.tools.tool_registry import ToolRegistry
 
     registry = ToolRegistry()
     registry.discover()
@@ -45,7 +45,7 @@ def test_sora_video_loads_openai_key_from_repo_dotenv_when_process_env_is_empty(
                 "-c",
                 (
                     "import os; "
-                    "import tools.video.sora_video; "
+                    "import openmontage.tools.video.sora_video; "
                     "print('set' if os.environ.get('OPENAI_API_KEY') else 'missing')"
                 ),
             ],
@@ -63,7 +63,7 @@ def test_sora_video_loads_openai_key_from_repo_dotenv_when_process_env_is_empty(
 
 
 def test_sora_video_reports_unavailable_when_openai_sdk_lacks_video_api(monkeypatch):
-    from tools.video.sora_video import SoraVideo
+    from openmontage.tools.video.sora_video import SoraVideo
 
     fake_openai = types.ModuleType("openai")
     fake_openai.__version__ = "1.76.0"
@@ -74,7 +74,7 @@ def test_sora_video_reports_unavailable_when_openai_sdk_lacks_video_api(monkeypa
 
 
 def test_sora_video_executes_with_current_create_and_poll_sdk_surface(monkeypatch, tmp_path):
-    from tools.video.sora_video import SoraVideo
+    from openmontage.tools.video.sora_video import SoraVideo
 
     calls = {}
 

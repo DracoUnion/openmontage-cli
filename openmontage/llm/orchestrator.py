@@ -22,9 +22,9 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Optional
 
-from openmontage import bridge
-from openmontage.gates import GatePolicy, Resolution
-from openmontage import config
+from .. import bridge
+from ..gates import GatePolicy, Resolution
+from .. import config
 
 MAX_TOOL_RESULT_CHARS = 12000
 

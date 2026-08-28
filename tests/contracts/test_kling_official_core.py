@@ -12,22 +12,22 @@ import pytest
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools._kling.client import KlingClient
-from tools._kling.errors import KlingAPIError, is_retryable_kling_error
-from tools._kling.account import get_account_costs, reset_account_usage_cache
-from tools._kling.elements import (
+from openmontage.tools._kling.client import KlingClient
+from openmontage.tools._kling.errors import KlingAPIError, is_retryable_kling_error
+from openmontage.tools._kling.account import get_account_costs, reset_account_usage_cache
+from openmontage.tools._kling.elements import (
     get_custom_element,
     list_custom_elements,
     list_preset_elements,
     normalize_element_list,
     write_elements_artifact,
 )
-from tools._kling.schemas import DEFAULT_API_BASE_URL
-from tools.audio.kling_tts import KlingTTS
-from tools.avatar.kling_avatar import KlingAvatar
-from tools.avatar.kling_lip_sync import KlingLipSync
-from tools.graphics.kling_official_image import KlingOfficialImage
-from tools.video.kling_official_video import KlingOfficialVideo
+from openmontage.tools._kling.schemas import DEFAULT_API_BASE_URL
+from openmontage.tools.audio.kling_tts import KlingTTS
+from openmontage.tools.avatar.kling_avatar import KlingAvatar
+from openmontage.tools.avatar.kling_lip_sync import KlingLipSync
+from openmontage.tools.graphics.kling_official_image import KlingOfficialImage
+from openmontage.tools.video.kling_official_video import KlingOfficialVideo
 
 
 class FakeResponse:
@@ -261,7 +261,7 @@ def test_elements_helper_read_only_endpoints_do_not_enter_registry(isolated_tool
         ("/v1/general/advanced-custom-elements", {}),
         ("/v1/general/advanced-presets-elements", {}),
     ]
-    import tools._kling.elements as elements_module
+    import openmontage.tools._kling.elements as elements_module
 
     assert not hasattr(elements_module, "create_element")
     assert not hasattr(elements_module, "delete_element")

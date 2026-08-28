@@ -23,8 +23,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from lib.checkpoint import PROJECTS_DIR, init_project, write_checkpoint
-from lib.events import emit_event
+from openmontage.lib.checkpoint import PROJECTS_DIR, init_project, write_checkpoint
+from openmontage.lib.events import emit_event
 
 SCENES = [
     ("sc1", "Opening — a lighthouse at dusk", 0, 4, "The coast holds its breath."),

@@ -2,8 +2,8 @@ from dataclasses import dataclass
 
 import pytest
 
-import tools.video.stock_sources as stock_sources
-from tools.video.corpus_builder import CorpusBuilder
+import openmontage.tools.video.stock_sources as stock_sources
+from openmontage.tools.video.corpus_builder import CorpusBuilder
 
 
 @dataclass

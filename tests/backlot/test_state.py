@@ -6,8 +6,8 @@ from pathlib import Path
 
 import pytest
 
-from backlot import state as state_mod
-from backlot.state import list_projects, load_board_state, summarize_project
+from openmontage.backlot import state as state_mod
+from openmontage.backlot.state import list_projects, load_board_state, summarize_project
 
 
 @pytest.fixture

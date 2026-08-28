@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from tools.audio.audio_mixer import AudioMixer
+from openmontage.tools.audio.audio_mixer import AudioMixer
 
 
 pytestmark = pytest.mark.skipif(

@@ -8,7 +8,7 @@ Run: pytest tests/contracts/test_jimeng_video.py -v
 
 import pytest
 
-from tools.base_tool import (
+from openmontage.tools.base_tool import (
     BaseTool,
     Determinism,
     ExecutionMode,
@@ -17,7 +17,7 @@ from tools.base_tool import (
     ToolStatus,
     ToolTier,
 )
-from tools.video.jimeng_video import JimengVideo
+from openmontage.tools.video.jimeng_video import JimengVideo
 
 
 # ------------------------------------------------------------------
@@ -305,14 +305,14 @@ class TestToolSpecific:
 class TestRegistryDiscovery:
 
     def test_discoverable(self):
-        from tools.tool_registry import ToolRegistry
+        from openmontage.tools.tool_registry import ToolRegistry
         registry = ToolRegistry()
         registry.discover()
         names = {t.name for t in registry._tools.values()}
         assert "jimeng_video" in names
 
     def test_distinct_from_other_minimax_tools(self):
-        from tools.tool_registry import ToolRegistry
+        from openmontage.tools.tool_registry import ToolRegistry
         registry = ToolRegistry()
         registry.discover()
         jimeng = [t for t in registry._tools.values() if t.name == "jimeng_video"]

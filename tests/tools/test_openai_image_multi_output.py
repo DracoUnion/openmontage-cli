@@ -45,7 +45,7 @@ def openai_tool(monkeypatch):
     fake.OpenAI = _FakeClient
     monkeypatch.setitem(sys.modules, "openai", fake)
     monkeypatch.setenv("OPENAI_API_KEY", "test-key")
-    from tools.graphics.openai_image import OpenAIImage
+    from openmontage.tools.graphics.openai_image import OpenAIImage
 
     return OpenAIImage()
 
@@ -84,7 +84,7 @@ def test_single_image_keeps_exact_output_path(openai_tool, tmp_path):
 
 
 def test_multi_output_paths_are_suffixed_and_unique():
-    from tools.graphics.openai_image import OpenAIImage
+    from openmontage.tools.graphics.openai_image import OpenAIImage
 
     paths = OpenAIImage._output_paths("/tmp/art/pic.png", 3, "png")
     assert [p.name for p in paths] == ["pic_1.png", "pic_2.png", "pic_3.png"]

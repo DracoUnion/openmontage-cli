@@ -12,8 +12,8 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.graphics.image_selector import ImageSelector
-from tools.video.video_selector import VideoSelector
+from openmontage.tools.graphics.image_selector import ImageSelector
+from openmontage.tools.video.video_selector import VideoSelector
 
 
 IMAGE_CASES: tuple[dict[str, Any], ...] = (

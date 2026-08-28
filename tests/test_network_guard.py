@@ -9,8 +9,8 @@ import socket
 
 import pytest
 
-from tools.graphics.atlas_image import AtlasImage
-from tools.video.atlas_video import AtlasVideo
+from openmontage.tools.graphics.atlas_image import AtlasImage
+from openmontage.tools.video.atlas_video import AtlasVideo
 
 
 class TestGuardBlocksOutbound:

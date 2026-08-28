@@ -5,9 +5,9 @@ from pathlib import Path
 
 import pytest
 
-from backlot import state as state_mod
-from backlot.state import load_board_state
-from lib.checkpoint import (
+from openmontage.backlot import state as state_mod
+from openmontage.backlot.state import load_board_state
+from openmontage.lib.checkpoint import (
     CANONICAL_STAGE_ARTIFACTS,
     CheckpointValidationError,
     write_checkpoint,

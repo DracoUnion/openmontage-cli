@@ -19,7 +19,7 @@ import pytest
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.video.green_screen_processor import GreenScreenProcessor  # noqa: E402
+from openmontage.tools.video.green_screen_processor import GreenScreenProcessor  # noqa: E402
 
 
 def test_chromakey_filter_scales_background_to_frame():

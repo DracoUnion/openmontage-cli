@@ -6,14 +6,14 @@ import pytest
 
 def test_blank_google_location_uses_documented_default(monkeypatch) -> None:
     monkeypatch.setenv("GOOGLE_CLOUD_LOCATION", "")
-    from tools.google_credentials import resolve_google_location
+    from openmontage.tools.google_credentials import resolve_google_location
 
     assert resolve_google_location() == "us-central1"
 
 
 def test_google_music_requests_the_global_vertex_location(monkeypatch, tmp_path) -> None:
     monkeypatch.setenv("GOOGLE_API_KEY", "test-key")
-    import tools.google_credentials as credentials
+    import openmontage.tools.google_credentials as credentials
 
     captured = {}
 
@@ -23,7 +23,7 @@ def test_google_music_requests_the_global_vertex_location(monkeypatch, tmp_path)
 
     monkeypatch.setattr(credentials, "get_genai_client", stop_before_network)
 
-    from tools.audio.google_music import GoogleMusic
+    from openmontage.tools.audio.google_music import GoogleMusic
 
     result = GoogleMusic().execute({
         "prompt": "solo piano",
@@ -73,7 +73,7 @@ def test_veo_accepts_vertex_and_requires_inline_bytes(
     monkeypatch, tmp_path, video_bytes, expected_success
 ) -> None:
     monkeypatch.setenv("GOOGLE_API_KEY", "test-key")
-    import tools.google_credentials as credentials
+    import openmontage.tools.google_credentials as credentials
 
     monkeypatch.setattr(
         credentials,
@@ -81,7 +81,7 @@ def test_veo_accepts_vertex_and_requires_inline_bytes(
         lambda http_options=None, location=None: _VertexClient(video_bytes),
     )
 
-    from tools.video.veo_video import VeoVideo
+    from openmontage.tools.video.veo_video import VeoVideo
 
     output = tmp_path / "video.mp4"
     result = VeoVideo().execute({

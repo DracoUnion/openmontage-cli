@@ -34,7 +34,7 @@ import sys
 from pathlib import Path
 from typing import Any, Optional
 
-from openmontage import __version__
+from . import __version__
 
 
 def _project_root() -> Path:
@@ -111,7 +111,7 @@ def cmd_doctor(_args: argparse.Namespace) -> int:
     # Try to import the registry as a sanity check.
     try:
         _ensure_root_in_path()
-        from tools.tool_registry import registry  # type: ignore[import]
+        from .tools.tool_registry import registry  # type: ignore[import]
 
         registry.ensure_discovered()
         available = len(registry.get_available())
@@ -132,7 +132,7 @@ def cmd_doctor(_args: argparse.Namespace) -> int:
 
 def cmd_tools(args: argparse.Namespace) -> int:
     _ensure_root_in_path()
-    from tools.tool_registry import registry  # type: ignore[import]
+    from .tools.tool_registry import registry  # type: ignore[import]
 
     registry.ensure_discovered()
     tools = registry.get_available()
@@ -157,7 +157,7 @@ def cmd_tools(args: argparse.Namespace) -> int:
 
 def cmd_capabilities(args: argparse.Namespace) -> int:
     _ensure_root_in_path()
-    from tools.tool_registry import registry  # type: ignore[import]
+    from .tools.tool_registry import registry  # type: ignore[import]
 
     registry.ensure_discovered()
     summary = registry.provider_menu_summary()
@@ -224,7 +224,7 @@ def cmd_pipeline_show(args: argparse.Namespace) -> int:
 
 def cmd_init(args: argparse.Namespace) -> int:
     _ensure_root_in_path()
-    from lib.checkpoint import init_project  # type: ignore[import]
+    from .lib.checkpoint import init_project  # type: ignore[import]
 
     project_id = args.project_id
     title = args.title
@@ -255,7 +255,7 @@ def cmd_init(args: argparse.Namespace) -> int:
 def _backlot_open(project_id: Optional[str]) -> int:
     try:
         _ensure_root_in_path()
-        from backlot.__main__ import main as backlot_main  # type: ignore[import]
+        from .backlot.__main__ import main as backlot_main  # type: ignore[import]
 
         argv = ["open", project_id] if project_id else ["open"]
         return backlot_main(argv)
@@ -338,7 +338,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     # Import lazily so the read-only commands still work even if an LLM
     # dependency (openai) is missing.
     if args.command in ("make", "plan", "run", "resume"):
-        from openmontage.commands.make_cmd import (
+        from .commands.make_cmd import (
             cmd_make, cmd_plan, cmd_run, cmd_resume,
         )
         command_map.update({

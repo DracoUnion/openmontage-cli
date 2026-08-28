@@ -11,7 +11,7 @@ import pytest
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from tools.audio.audio_mixer import AudioMixer  # noqa: E402
+from openmontage.tools.audio.audio_mixer import AudioMixer  # noqa: E402
 
 
 @pytest.mark.parametrize("operation", ["mix", "full_mix"])
