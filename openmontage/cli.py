@@ -281,7 +281,7 @@ def _build_parser() -> argparse.ArgumentParser:
         epilog="Tip: run 'openmontage doctor' to check the environment.",
     )
     parser.add_argument("--version", action="version", version=f"openmontage {__version__}")
-        parser.add_argument("-m", "--model", default=openai_model, help="model name")
+    parser.add_argument("-m", "--model", default=openai_model, help="model name")
     parser.add_argument("-k", "--key", default=openai_key, help="OpenAI API key")
     parser.add_argument("-r", "--retry", type=int, default=1_000_000, help="times of retry")
     parser.add_argument("-tm", "--temp", type=float, default=1, help="temperature")
