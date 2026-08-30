@@ -114,6 +114,8 @@ USER REQUEST: {request}
 {helper_hint}
 
 Begin. Run preflight, select and load the pipeline, initialise the project, then execute stage by stage. Use finalize when the deliverable is ready.
+
+Note that tool calls must be surrounded in "[tool]...[/tool]".
 """
 
 
