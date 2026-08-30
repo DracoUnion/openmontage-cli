@@ -50,7 +50,7 @@ def _ensure_root_in_path() -> None:
 
 
 def _pipelines_dir() -> Path:
-    return _project_root() / "pipeline_defs"
+    return _project_root() / "openmontage" / "pipeline_defs"
 
 
 def _list_pipelines() -> list[str]:
@@ -99,10 +99,12 @@ def cmd_doctor(_args: argparse.Namespace) -> int:
     if sys.version_info < (3, 10):
         issues.append(f"Python {sys.version_info.major}.{sys.version_info.minor} is below 3.10")
 
-    required_dirs = ["tools", "lib", "pipeline_defs", "schemas", "styles", "skills"]
+    required_dirs = ["tools", "lib", "schemas", "styles", "skills"]
     for name in required_dirs:
         if not (root / name).is_dir():
             issues.append(f"Missing required directory: {name}")
+    if not _pipelines_dir().is_dir():
+        issues.append("Missing required directory: openmontage/pipeline_defs")
 
     env_file = root / ".env"
     if not env_file.exists():
@@ -211,7 +213,7 @@ def cmd_pipelines(_args: argparse.Namespace) -> int:
 
 def cmd_pipeline_show(args: argparse.Namespace) -> int:
     root = _project_root()
-    path = root / "pipeline_defs" / f"{args.name}.yaml"
+    path = root / "openmontage" / "pipeline_defs" / f"{args.name}.yaml"
     if not path.is_file():
         print(f"Unknown pipeline: {args.name!r}")
         print("Choose from:")

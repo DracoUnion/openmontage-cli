@@ -269,7 +269,7 @@ def _stage_requires_approval(pipeline_type: Optional[str], stage: str) -> Option
         raise CheckpointValidationError(
             f"Unknown pipeline_type {pipeline_type!r} — cannot resolve gate "
             f"policy for stage {stage!r}. Check the spelling against "
-            f"pipeline_defs/*.yaml."
+            f"openmontage/pipeline_defs/*.yaml."
         )
     except Exception as exc:
         import logging

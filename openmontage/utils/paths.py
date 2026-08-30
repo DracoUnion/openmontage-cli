@@ -31,7 +31,7 @@ def skill_path(rel: str) -> Path:
 
 
 def pipeline_path(name: str) -> Path:
-    return project_root() / "pipeline_defs" / f"{name}.yaml"
+    return project_root() / "openmontage" / "pipeline_defs" / f"{name}.yaml"
 
 
 __all__ = [

@@ -27,7 +27,7 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parent.parent.parent
-PIPELINE_DIR = ROOT / "pipeline_defs"
+PIPELINE_DIR = ROOT / "openmontage" / "pipeline_defs"
 SKILLS_DIR = ROOT / "skills"
 
 # Tokens we expect in any compliant planning-stage skill. A skill needs AT

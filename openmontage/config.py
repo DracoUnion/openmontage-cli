@@ -2,7 +2,7 @@
 
 The CLI is a self-contained copy of OpenMontage. This module centralises:
 
-- resolving the project root (where tools/, lib/, pipeline_defs/, skills/ live)
+- resolving the project root (where tools/, lib/, openmontage/pipeline_defs/, skills/ live)
 - loading the .env file the same way the OpenMontage tools do
 - reading orchestrator / LLM settings with sensible defaults
 """

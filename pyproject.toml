@@ -82,7 +82,7 @@ packages = [
 ]
 
 [tool.setuptools.package-data]
-openmontage = ["../pipeline_defs/*.yaml", "../styles/*.yaml", "../skills/**/*.md", "*.yaml", "*.json", "*.md", "tools/**/*.yaml", "tools/**/*.json", "tools/**/*.md", "backlot/ui/*"]
+openmontage = ["pipeline_defs/*.yaml", "../styles/*.yaml", "../skills/**/*.md", "*.yaml", "*.json", "*.md", "tools/**/*.yaml", "tools/**/*.json", "tools/**/*.md", "backlot/ui/*"]
 "openmontage.backlot" = ["ui/*"]
 "openmontage.schemas" = ["**/*.json"]
 "*" = ["*.yaml", "*.json", "*.md", "*.html", "*.css", "*.js", "*.ts", "*.tsx", "*.png", "*.svg"]

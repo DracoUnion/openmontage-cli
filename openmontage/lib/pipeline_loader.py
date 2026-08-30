@@ -1,6 +1,6 @@
 """Pipeline manifest loader.
 
-Loads and validates pipeline YAML manifests from pipeline_defs/.
+Loads and validates pipeline YAML manifests from openmontage/pipeline_defs/.
 """
 
 from __future__ import annotations
@@ -12,7 +12,7 @@ from typing import Any, Optional
 import yaml
 import jsonschema
 
-PIPELINE_DEFS_DIR = Path(__file__).resolve().parents[2] / "pipeline_defs"
+PIPELINE_DEFS_DIR = Path(__file__).resolve().parents[1] / "pipeline_defs"
 SCHEMA_PATH = (
     Path(__file__).resolve().parents[2]
     / "openmontage" / "schemas"
