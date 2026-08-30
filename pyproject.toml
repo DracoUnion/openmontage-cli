@@ -55,7 +55,6 @@ openmontage-cli = "openmontage.cli:main"
 packages = [
     "openmontage",
     "openmontage.llm",
-    "openmontage.llm.providers",
     "openmontage.commands",
     "openmontage.utils",
     "openmontage.tools",
