@@ -98,27 +98,6 @@ def make(
         summary = orch.run(request, helper_hint=helper)
     except Exception as exc:
         # Surface API / network errors cleanly instead of a raw traceback.
-        import openai as _openai
-        if isinstance(exc, _openai.APIConnectionError):
-            return MakeResult(
-                False,
-                "Could not reach the OpenAI API (network or proxy error). "
-                "Check your connection / OPENAI_BASE_URL and retry.",
-                project_id=proj,
-            )
-        if isinstance(exc, _openai.AuthenticationError):
-            return MakeResult(
-                False,
-                "OPENAI_API_KEY was rejected by the API. Check that the key "
-                "is valid and retry.",
-                project_id=proj,
-            )
-        if isinstance(exc, _openai.APIError):
-            return MakeResult(
-                False,
-                f"OpenAI API error: {exc}",
-                project_id=proj,
-            )
         return MakeResult(False, f"Orchestrator error: {traceback.format_exc()}",
                           project_id=proj)
 
