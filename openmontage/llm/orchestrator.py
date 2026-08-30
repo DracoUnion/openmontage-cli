@@ -124,7 +124,7 @@ class Orchestrator:
         self,
         *,
         gate_policy: Optional[GatePolicy] = None,
-        max_turns: Optional[int] = None,
+        max_turns: Optional[int] = 50,
         model: Optional[str] = None,
         llm_call=None,
     ) -> None:
