@@ -91,7 +91,7 @@ def make(
 
     from .llm.orchestrator import Orchestrator
 
-    orch = Orchestrator(gate_policy=policy, model=model or config.model())
+    orch = Orchestrator(gate_policy=policy, model=model)
 
     try:
         summary = orch.run(request, helper_hint=helper)

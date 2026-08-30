@@ -125,7 +125,7 @@ class Orchestrator:
     ) -> None:
         self.gate_policy = gate_policy or GatePolicy(yes=True)
         self.max_turns = max_turns or config.max_turns()
-        self.model = model or config.model()
+        self.model = model
         self._llm_call = llm_call
 
     # -- gate override: the host may block a 'completed' write on a gated
