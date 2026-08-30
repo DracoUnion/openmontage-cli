@@ -13,5 +13,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
 # Overridable for staging/screenshots/tests. Everything — checkpoint writes,
-# event attribution, the Backlot board — follows the same root.
-PROJECTS_DIR = Path(os.environ.get("OPENMONTAGE_PROJECTS_DIR") or (REPO_ROOT / "projects"))
+# event attribution, the Backlot board — follows the same root. Defaults to
+# the current working directory so projects land where the user invoked the
+# tool, not under the package/repo directory.
+PROJECTS_DIR = Path(os.environ.get("OPENMONTAGE_PROJECTS_DIR") or (Path.cwd() / "projects"))

@@ -5,6 +5,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+from ..lib.paths import PROJECTS_DIR
+
 
 def project_root() -> Path:
     """Return the OpenMontage working-copy root (the self-contained copy)."""
@@ -20,8 +22,9 @@ def ensure_root_in_path() -> None:
 
 
 def projects_dir() -> Path:
-    """Directory where production workspaces live (gitignored)."""
-    return project_root() / "projects"
+    """Directory where production workspaces live (gitignored), under the
+    current working directory."""
+    return PROJECTS_DIR
 
 
 def skill_path(rel: str) -> Path:
