@@ -158,6 +158,7 @@ class Orchestrator:
                     )
                 break
 
+            print(f'toolcall: {tool_blocks}')
             toolcall_res_list = []
             for tc in tool_blocks:
                 summary.tool_calls += 1
@@ -178,6 +179,8 @@ class Orchestrator:
                     "id": tc.get("id", ""),
                     "result": _render_result(result),
                 })
+            
+            print(f'toolcall res: {toolcall_res_list}')
             toolcall_res_str = json.dumps(toolcall_res_list, ensure_ascii=False)
             msgs.append({"role": "assistant", "content": res})
             msgs.append({
