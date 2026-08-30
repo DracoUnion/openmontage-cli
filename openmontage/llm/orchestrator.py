@@ -156,7 +156,7 @@ class Orchestrator:
                 msgs.append({"role": "assistant", "content": res})
                 msgs.append({
                     "role": "user",
-                    "content": f"No tool calls fount. Please surround tool calls in [tool]...[/tool]. And if you want to stop, call `finalize`.",
+                    "content": f"No tool calls found. Please surround tool calls in [tool]...[/tool]. And if you want to stop, call `finalize`.",
                 })
                 continue
 
