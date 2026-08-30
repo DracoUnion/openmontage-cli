@@ -341,7 +341,6 @@ def _build_parser() -> argparse.ArgumentParser:
         else:
             p.add_argument("--plan-only", action="store_true", default=False, help="stop after planning; do not generate assets or render")
         p.add_argument("--yes", action="store_true", default=False, help="auto-approve every approval gate")
-        p.add_argument("--model", default=None, help="orchestrator model id (default: gpt-4o)")
         p.add_argument("--om-root", default=None, help="project root override")
 
     return parser
