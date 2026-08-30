@@ -133,8 +133,10 @@ class Orchestrator:
     #    boundary *before* the LLM's own checkpoint_write call.
 
     def run(self, request: str, *, helper_hint: str = "") -> RunSummary:
-        
+        tool_defs = om_openai.build_openai_tools(om_openai.TOOL_DEFS)
+        tool_pmt = om_openai.TOOLCALL_PMT.replace('{tool_def}', json.dumps(tool_defs, ensure_ascii=False))
         msgs: list[dict[str, Any]] = [
+            {"role": "system", 'content': tool_pmt},
             {"role": "system", "content": build_system_prompt(request, helper_hint)},
             {
                 "role": "user",
