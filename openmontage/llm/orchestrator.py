@@ -116,87 +116,127 @@ USER REQUEST: {request}
 class Orchestrator:
     def __init__(
         self,
-        provider,
         *,
         gate_policy: Optional[GatePolicy] = None,
         max_turns: Optional[int] = None,
+        model: Optional[str] = None,
+        llm_call=None,
     ) -> None:
-        self.provider = provider
         self.gate_policy = gate_policy or GatePolicy(yes=True)
         self.max_turns = max_turns or config.max_turns()
+        self.model = model or config.model()
+        self._llm_call = llm_call
 
     # -- gate override: the host may block a 'completed' write on a gated
     #    stage unless the CLI policy says approve. We enforce it at the bridge
     #    boundary *before* the LLM's own checkpoint_write call.
 
     def run(self, request: str, *, helper_hint: str = "") -> RunSummary:
-        self.provider.reset()
-        self.provider.add_system(build_system_prompt(request, helper_hint))
+        msgs: list[dict[str, Any]] = [
+            {"role": "system", "content": build_system_prompt(request, helper_hint)},
+            {
+                "role": "user",
+                "content": (
+                    "Begin. Run preflight, select and load the pipeline, initialise the "
+                    "project, then execute stage by stage. Use finalize when the "
+                    "deliverable is ready."
+                ),
+            },
+        ]
         summary = RunSummary()
-        # The provider needs a user turn after the system message. The request
-        # is already in the system prompt; a brief user turn kick-starts it.
-        self.provider.add_user(
-            "Begin. Run preflight, select and load the pipeline, initialise the "
-            "project, then execute stage by stage. Use finalize when the "
-            "deliverable is ready."
-        )
         max_iter = self.max_turns
         for _ in range(max_iter):
             summary.turns += 1
-            turn = self.provider.turn()
-            if not turn.tool_calls:
-                if turn.finish_reason in ("stop",) or (
-                    not turn.content and not turn.tool_calls
-                ):
-                    # No tool calls and the model stopped: if it never
-                    # finalised, treat as a soft stop.
-                    if not summary.finalized:
-                        summary.finalized_message = (
-                            "Model ended without calling finalize."
-                            + (f" Final text: {turn.content}" if turn.content else "")
-                        )
-                    break
-                # A content-only turn with no tool call and not 'stop' — rare;
-                # loop again rather than spinning (bounded by max_iter).
-                continue
-            for tc in turn.tool_calls:
+            res = self._call_llm(msgs)
+            tool_blocks = self._parse_toolcall(res)
+            if not tool_blocks:
+                # No tool call: the model stopped or is giving plain text. Treat
+                # as a soft stop unless it already finalised.
+                if not summary.finalized:
+                    summary.finalized_message = (
+                        "Model ended without calling finalize."
+                        + (f" Final text: {res}" if res else "")
+                    )
+                break
+
+            toolcall_res_list = []
+            for tc in tool_blocks:
                 summary.tool_calls += 1
-                name = tc["function"]["name"]
-                try:
-                    args = json.loads(tc["function"]["arguments"] or "{}")
-                except json.JSONDecodeError:
-                    args = {}
-                result = self._dispatch(name, args, summary)
-                self.provider.add_tool_result(
-                    tc["id"], name, _render_result(result)
-                )
-                # If this tool call was a finalize, stop the loop entirely.
+                name = tc.get("tool", "")
+                args = tc.get("parameters") or {}
+                # finalize ends the run immediately.
                 if name == "finalize":
                     summary.finalized = True
-                    try:
-                        summary.finalized_message = args.get("message", "")
-                    except Exception:
-                        pass
+                    summary.finalized_message = args.get("message", "")
                     return summary
-                if name == "checkpoint_write":
-                    # After a blocked gated stage, if the host paused (no
-                    # --yes), we should surface the pause and halt.
-                    if result.get("_gate_paused"):
-                        summary.finalized_message = result.get("_gate_pause_msg", "")
-                        return summary
+                result = self._dispatch(name, args, summary)
+                # After a blocked gated stage, if the host paused (no --yes),
+                # surface the pause and halt.
+                if result.get("_gate_paused"):
+                    summary.finalized_message = result.get("_gate_pause_msg", "")
+                    return summary
+                toolcall_res_list.append({
+                    "id": tc.get("id", ""),
+                    "result": _render_result(result),
+                })
+            toolcall_res_str = json.dumps(toolcall_res_list, ensure_ascii=False)
+            msgs.append({"role": "assistant", "content": res})
+            msgs.append({
+                "role": "user",
+                "content": f"[tool-result]{toolcall_res_str}[/tool-result]",
+            })
         if not summary.finalized:
             summary.finalized_message = (
-                summary.finalized_message or f"Reached max turns ({max_iter}) without finalize."
+                summary.finalized_message
+                or f"Reached max turns ({max_iter}) without finalize."
             )
         return summary
+
+    # -- LLM call: use llm/openai.py's call_llm (text protocol). Overridable
+    #    seam so tests can script responses without hitting the network.
+
+    def _call_llm(self, msgs: list[dict[str, Any]]) -> str:
+        if self._llm_call is not None:
+            return self._llm_call(msgs, self.model)
+        from . import openai as om_openai
+        # llm/openai.py's call_llm reads process-global openai.* props; configure
+        # them here so the text protocol works without a provider object.
+        import os
+        import openai as _oai
+        _oai.api_key = config.api_key()
+        _oai.base_url = os.environ.get("OPENAI_BASE_URL") or _oai.base_url
+        _oai.user_agent = os.environ.get("OPENMONTAGE_USER_AGENT", "openmontage-cli")
+        _oai.stream = False
+        _oai.timeout = _oai.Timeout(
+            read=int(os.environ.get("OPENMONTAGE_READ_TIMEOUT", "120")),
+            connect=int(os.environ.get("OPENMONTAGE_CONNECT_TIMEOUT", "60")),
+            write=None,
+            pool=None,
+        )
+        _oai.rpre = os.environ.get("OPENMONTAGE_REPETITION_REGEX", "")
+        return om_openai.call_llm(msgs, self.model)
+
+    @staticmethod
+    def _parse_toolcall(res: str) -> list[dict[str, Any]]:
+        """Parse the first [tool]...[/tool] block in a response into a list of
+        tool-call dicts (id / tool / parameters). Mirrors llm/openai.py."""
+        import re
+        m = re.search(r"\[tool\]([\s\S]+)\[/tool\]", res)
+        if not m:
+            return []
+        try:
+            blocks = json.loads(m.group(1))
+        except json.JSONDecodeError:
+            return []
+        if not isinstance(blocks, list):
+            return []
+        return blocks
 
     # -- dispatch, with gate policy enforcement on checkpoint_write --------
 
     def _dispatch(self, name: str, args: dict[str, Any], summary: RunSummary) -> dict[str, Any]:
         if name == "checkpoint_write":
             return self._checkpoint_write_gated(args, summary)
-        if name == "finalize":
-            return bridge.call(name, args)
         return bridge.call(name, args)
 
     def _checkpoint_write_gated(

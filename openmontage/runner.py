@@ -95,14 +95,9 @@ def make(
 
     helper = _build_helper(pipeline, duration, plan_only, yes)
 
-    from .llm.providers.openai import OpenAIOrchestrator
     from .llm.orchestrator import Orchestrator
 
-    provider = OpenAIOrchestrator(
-        api_key=config.api_key(),
-        model=model or config.model(),
-    )
-    orch = Orchestrator(provider, gate_policy=policy)
+    orch = Orchestrator(gate_policy=policy, model=model or config.model())
 
     try:
         summary = orch.run(request, helper_hint=helper)

@@ -45,58 +45,33 @@ def test_tool_defs_have_armatures():
     assert names == set(bridge.tool_names())
 
 
-class _FakeProvider:
-    """A scripted provider that performs a couple of tools then finalizes."""
+class _FakeLLM:
+    """A scripted text-protocol LLM that avoids network calls."""
 
     def __init__(self, script):
         self.script = list(script)
         self.turns_served = 0
 
-    def reset(self):
-        pass
-
-    def add_system(self, text):
-        pass
-
-    def add_user(self, text):
-        pass
-
-    def add_assistant(self, turn):
-        pass
-
-    def add_tool_result(self, tool_call_id, name, content):
-        # record results in case the script needs them
-        self.last_result = content
-
-    def turn(self):
+    def __call__(self, _msgs, _model):
         self.turns_served += 1
-        call = self.script.pop(0) if self.script else {"finalize", "finalize"}
-        return _mk_turn(call)
-
-
-def _mk_turn(call):
-    from types import SimpleNamespace
-    if isinstance(call, str):
-        name = call
-        args = {}
-    else:
-        name, args = call
-    tc = {
-        "id": f"call_{name}",
-        "type": "function",
-        "function": {"name": name, "arguments": json.dumps(args)},
-    }
-    return SimpleNamespace(
-        content=None, tool_calls=[tc], finish_reason="tool_calls", usage=None
-    )
+        call = self.script.pop(0) if self.script else ("finalize", {})
+        if isinstance(call, str):
+            name, args = call, {}
+        else:
+            name, args = call
+        return "[tool]" + json.dumps([{
+            "id": f"call_{name}",
+            "tool": name,
+            "parameters": args,
+        }]) + "[/tool]"
 
 
 def _run_orchestrator(script, gate_policy=None):
-    provider = _FakeProvider(script)
+    fake_llm = _FakeLLM(script)
     orch = Orchestrator(
-        provider,
         gate_policy=gate_policy or GatePolicy(yes=True),
         max_turns=20,
+        llm_call=fake_llm,
     )
     return orch.run("test request")
 
