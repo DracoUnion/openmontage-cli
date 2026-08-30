@@ -44,7 +44,7 @@ def _now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def build_system_prompt(request: str, helper_hint: str = "") -> str:
+def build_user_prompt(request: str, helper_hint: str = "") -> str:
     """Assemble the orchestrator system prompt from the AGENT_GUIDE contract.
 
     This encodes the essential rules that used to live in the agent's head:
@@ -137,7 +137,7 @@ class Orchestrator:
         tool_pmt = om_openai.TOOLCALL_PMT.replace('{tool_def}', json.dumps(tool_defs, ensure_ascii=False))
         msgs: list[dict[str, Any]] = [
             {"role": "system", 'content': tool_pmt},
-            {"role": "system", "content": build_system_prompt(request, helper_hint)},
+            {"role": "user", "content": build_user_prompt(request, helper_hint)},
             {
                 "role": "user",
                 "content": (

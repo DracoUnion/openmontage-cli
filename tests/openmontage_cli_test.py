@@ -14,7 +14,7 @@ import pytest
 
 from openmontage import bridge
 from openmontage.gates import GatePolicy, Resolution
-from openmontage.llm.orchestrator import Orchestrator, build_system_prompt
+from openmontage.llm.orchestrator import Orchestrator, build_user_prompt
 
 
 def test_bridge_preflight_returns_menu():
@@ -132,7 +132,7 @@ def test_gate_policy_matrix():
 
 
 def test_build_system_prompt_includes_contract():
-    p = build_system_prompt("make a 45s explainer about black holes")
+    p = build_user_prompt("make a 45s explainer about black holes")
     assert "RULE ZERO" in p
     assert "MANDATORY PREFLIGHT" in p
     assert "checkpoint_write" in p or "CHECKPOINTS" in p
