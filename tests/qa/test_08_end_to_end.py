@@ -16,9 +16,6 @@ from pathlib import Path
 PROJECT_ROOT = str(Path(__file__).resolve().parent.parent.parent)
 sys.path.insert(0, PROJECT_ROOT)
 
-from openmontage.lib.env_loader import load_env
-load_env()
-
 from openmontage.lib.checkpoint import (
     write_checkpoint,
     read_checkpoint,

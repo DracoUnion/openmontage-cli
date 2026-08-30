@@ -67,20 +67,14 @@ def make(
         plan_only: stop after planning; never reach an asset/approval gate.
         yes: auto-approve every gate (full autonomous run).
         model: orchestrator model id (defaults to config).
-        om_root: project root override (used to load the correct .env).
+        om_root: retained for CLI compatibility; paths use the installed package.
     """
-    import os
 
     if om_root:
-        os.environ.setdefault("PYTHONPATH", "")
-        from .utils.paths import project_root as _pr
+        # Retained for CLI compatibility; package paths are resolved internally.
+        pass
 
-        # Note: bridge modules resolve paths against the live copy at import
-        # time; om_root is primarily for .env selection below.
-
-    # Load environment (API keys) from the project .env.
-    config.load_env()
-
+    # API keys are read from the process environment (see config.api_key()).
     if not config.has_api_key():
         return MakeResult(
             False,

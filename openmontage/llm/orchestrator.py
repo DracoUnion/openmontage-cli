@@ -25,6 +25,7 @@ from typing import Any, Optional
 from .. import bridge
 from ..gates import GatePolicy, Resolution
 from .. import config
+from . import openai as om_openai
 
 MAX_TOOL_RESULT_CHARS = 12000
 
@@ -198,22 +199,6 @@ class Orchestrator:
     def _call_llm(self, msgs: list[dict[str, Any]]) -> str:
         if self._llm_call is not None:
             return self._llm_call(msgs, self.model)
-        from . import openai as om_openai
-        # llm/openai.py's call_llm reads process-global openai.* props; configure
-        # them here so the text protocol works without a provider object.
-        import os
-        import openai as _oai
-        _oai.api_key = config.api_key()
-        _oai.base_url = os.environ.get("OPENAI_BASE_URL") or _oai.base_url
-        _oai.user_agent = os.environ.get("OPENMONTAGE_USER_AGENT", "openmontage-cli")
-        _oai.stream = False
-        _oai.timeout = _oai.Timeout(
-            read=int(os.environ.get("OPENMONTAGE_READ_TIMEOUT", "120")),
-            connect=int(os.environ.get("OPENMONTAGE_CONNECT_TIMEOUT", "60")),
-            write=None,
-            pool=None,
-        )
-        _oai.rpre = os.environ.get("OPENMONTAGE_REPETITION_REGEX", "")
         return om_openai.call_llm(msgs, self.model)
 
     @staticmethod

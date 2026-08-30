@@ -9,9 +9,6 @@ import sys, os, json, subprocess
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
-from openmontage.lib.env_loader import load_env
-load_env()
-
 from openmontage.tools.video.video_stitch import VideoStitch
 
 OUT = os.path.join(os.path.dirname(__file__), "output")
