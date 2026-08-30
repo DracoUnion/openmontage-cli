@@ -12,6 +12,7 @@ import sys
 from typing import Optional
 
 from ..runner import MakeResult, make
+from ..llm.openai import set_openai_props
 
 
 def _print_result(res: MakeResult) -> None:
@@ -25,6 +26,7 @@ def _print_result(res: MakeResult) -> None:
 
 
 def cmd_make(args: argparse.Namespace) -> int:
+    set_openai_props(args)
     res = make(
         args.request,
         pipeline=args.pipeline,
@@ -41,6 +43,7 @@ def cmd_make(args: argparse.Namespace) -> int:
 
 
 def cmd_plan(args: argparse.Namespace) -> int:
+    set_openai_props(args)
     res = make(
         args.request,
         pipeline=args.pipeline,
@@ -60,6 +63,7 @@ def cmd_run(args: argparse.Namespace) -> int:
     # `run` is a full production; `resume` continues from a checkpoint (the
     # orchestrator picks up via get_next_stage) and auto-approves outstanding
     # gates when --yes is given.
+    set_openai_props(args)
     res = make(
         args.request,
         pipeline=args.pipeline,
