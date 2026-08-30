@@ -200,7 +200,10 @@ class Orchestrator:
     def _call_llm(self, msgs: list[dict[str, Any]]) -> str:
         if self._llm_call is not None:
             return self._llm_call(msgs, self.model)
-        return om_openai.call_llm(msgs, self.model)
+        return om_openai.call_llm(
+            msgs, self.model,
+            temp=0.3, top_p=0.95,
+        )
 
     @staticmethod
     def _parse_toolcall(res: str) -> list[dict[str, Any]]:
