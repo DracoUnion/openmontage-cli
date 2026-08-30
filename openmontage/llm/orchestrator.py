@@ -111,7 +111,10 @@ At the end, call `finalize` with the project_id and the path to the rendered
 deliverable. The request is:
 
 USER REQUEST: {request}
-{helper_hint}"""
+{helper_hint}
+
+Begin. Run preflight, select and load the pipeline, initialise the project, then execute stage by stage. Use finalize when the deliverable is ready.
+"""
 
 
 class Orchestrator:
@@ -138,14 +141,6 @@ class Orchestrator:
         msgs: list[dict[str, Any]] = [
             {"role": "system", 'content': tool_pmt},
             {"role": "user", "content": build_user_prompt(request, helper_hint)},
-            {
-                "role": "user",
-                "content": (
-                    "Begin. Run preflight, select and load the pipeline, initialise the "
-                    "project, then execute stage by stage. Use finalize when the "
-                    "deliverable is ready."
-                ),
-            },
         ]
         summary = RunSummary()
         max_iter = self.max_turns
