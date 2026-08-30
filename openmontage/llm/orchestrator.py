@@ -133,6 +133,7 @@ class Orchestrator:
     #    boundary *before* the LLM's own checkpoint_write call.
 
     def run(self, request: str, *, helper_hint: str = "") -> RunSummary:
+        
         msgs: list[dict[str, Any]] = [
             {"role": "system", "content": build_system_prompt(request, helper_hint)},
             {
