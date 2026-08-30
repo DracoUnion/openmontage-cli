@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+import traceback
 from dataclasses import dataclass
 from typing import Any, Optional
 
@@ -118,7 +119,7 @@ def make(
                 f"OpenAI API error: {exc}",
                 project_id=proj,
             )
-        return MakeResult(False, f"Orchestrator error: {type(exc).__name__}: {exc}",
+        return MakeResult(False, f"Orchestrator error: {traceback.format_exc()}",
                           project_id=proj)
 
     # Plan-only: surface the plan and stop (nothing rendered).
