@@ -337,22 +337,22 @@ class TestTalkingHeadManifest:
 
 class TestPhase1Skills:
     @pytest.mark.parametrize("skill_path", [
-        "skills/core/ffmpeg.md",
-        "skills/core/whisperx.md",
-        "skills/core/subtitle-sync.md",
-        "skills/creative/video-editing.md",
-        "skills/creative/enhancement-strategy.md",
+        "openmontage/skills/core/ffmpeg.md",
+        "openmontage/skills/core/whisperx.md",
+        "openmontage/skills/core/subtitle-sync.md",
+        "openmontage/skills/creative/video-editing.md",
+        "openmontage/skills/creative/enhancement-strategy.md",
     ])
     def test_skill_file_exists(self, skill_path):
         full_path = PROJECT_ROOT / skill_path
         assert full_path.exists(), f"Skill file missing: {skill_path}"
 
     @pytest.mark.parametrize("skill_path", [
-        "skills/core/ffmpeg.md",
-        "skills/core/whisperx.md",
-        "skills/core/subtitle-sync.md",
-        "skills/creative/video-editing.md",
-        "skills/creative/enhancement-strategy.md",
+        "openmontage/skills/core/ffmpeg.md",
+        "openmontage/skills/core/whisperx.md",
+        "openmontage/skills/core/subtitle-sync.md",
+        "openmontage/skills/creative/video-editing.md",
+        "openmontage/skills/creative/enhancement-strategy.md",
     ])
     def test_skill_has_content(self, skill_path):
         full_path = PROJECT_ROOT / skill_path

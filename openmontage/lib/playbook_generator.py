@@ -17,10 +17,10 @@ from typing import Any
 import jsonschema
 
 PLAYBOOK_SCHEMA_PATH = (
-    Path(__file__).resolve().parents[2]
+    Path(__file__).resolve().parents[1]
     / "schemas" / "styles" / "playbook.schema.json"
 )
-STYLES_DIR = Path(__file__).resolve().parents[2] / "styles"
+STYLES_DIR = Path(__file__).resolve().parents[1] / "styles"
 CUSTOM_STYLES_DIR = STYLES_DIR / "custom"
 
 

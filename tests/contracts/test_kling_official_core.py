@@ -375,8 +375,8 @@ def test_architecture_env_mapping_includes_kling_official():
 
 def test_ai_video_skill_metadata_and_new_skill_link():
     ai_video = read(".agents/skills/ai-video-gen/SKILL.md")
-    index = read("skills/INDEX.md")
-    creative = read("skills/creative/video-gen-prompting.md")
+    index = read("openmontage/skills/INDEX.md")
+    creative = read("openmontage/skills/creative/video-gen-prompting.md")
     official_skill = PROJECT_ROOT / ".agents/skills/kling-official/SKILL.md"
 
     assert "KLING_API_KEY" in ai_video

@@ -28,7 +28,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 PIPELINE_DIR = ROOT / "openmontage" / "pipeline_defs"
-SKILLS_DIR = ROOT / "skills"
+SKILLS_DIR = ROOT / "openmontage" / "skills"
 
 # Tokens we expect in any compliant planning-stage skill. A skill needs AT
 # LEAST one from each group to pass. The groups are intentionally loose —

@@ -9,7 +9,7 @@ RUNTIME_FILES = [
     "lib/checkpoint.py",
     "lib/pipeline_loader.py",
     "schemas/artifacts/__init__.py",
-    "styles/playbook_loader.py",
+    "openmontage/styles/playbook_loader.py",
 ]
 
 

@@ -101,8 +101,8 @@ def cmd_doctor(_args: argparse.Namespace) -> int:
 
     required_dirs = ["tools", "lib", "schemas", "styles", "skills"]
     for name in required_dirs:
-        if not (root / name).is_dir():
-            issues.append(f"Missing required directory: {name}")
+        if not (root / "openmontage" / name).is_dir():
+            issues.append(f"Missing required directory: openmontage/{name}")
     if not _pipelines_dir().is_dir():
         issues.append("Missing required directory: openmontage/pipeline_defs")
 

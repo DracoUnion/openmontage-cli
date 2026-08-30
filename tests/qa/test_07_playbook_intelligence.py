@@ -10,7 +10,7 @@ import sys, os, json
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
-from styles.playbook_loader import (
+from openmontage.styles.playbook_loader import (
     load_playbook,
     validate_playbook,
     list_playbooks,

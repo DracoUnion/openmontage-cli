@@ -28,7 +28,7 @@ from openmontage.lib.pipeline_loader import (
 )
 from openmontage.lib.checkpoint import STAGES
 from openmontage.schemas.artifacts import list_schemas
-from styles.playbook_loader import load_playbook, list_playbooks, validate_playbook
+from openmontage.styles.playbook_loader import load_playbook, list_playbooks, validate_playbook
 from openmontage.tools.base_tool import ToolTier, ToolStatus
 from openmontage.tools.audio.music_gen import MusicGen
 from openmontage.tools.tool_registry import ToolRegistry
@@ -831,7 +831,7 @@ class TestStylePlaybooks:
 
 
 class TestSkillsExist:
-    SKILLS_DIR = PROJECT_ROOT / "skills"
+    SKILLS_DIR = PROJECT_ROOT / "openmontage" / "skills"
 
     @pytest.mark.parametrize(
         "skill_path",

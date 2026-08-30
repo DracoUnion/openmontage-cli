@@ -77,12 +77,17 @@ packages = [
     "openmontage.schemas.pipelines",
     "openmontage.schemas.styles",
     "openmontage.schemas.tools",
+    "openmontage.styles",
+    "openmontage.skills.core",
+    "openmontage.skills.creative",
+    "openmontage.skills.meta",
+    "openmontage.skills.pipelines",
     "openmontage.backlot",
     "openmontage.backlot.ui",
 ]
 
 [tool.setuptools.package-data]
-openmontage = ["pipeline_defs/*.yaml", "../styles/*.yaml", "../skills/**/*.md", "*.yaml", "*.json", "*.md", "tools/**/*.yaml", "tools/**/*.json", "tools/**/*.md", "backlot/ui/*"]
+openmontage = ["pipeline_defs/*.yaml", "styles/*.yaml", "styles/*.py", "skills/core/**/*.md", "skills/creative/**/*.md", "skills/meta/**/*.md", "skills/pipelines/**/*.md", "skills/INDEX.md", "skills/**/*.yaml", "skills/**/*.json", "*.yaml", "*.json", "*.md", "tools/**/*.yaml", "tools/**/*.json", "tools/**/*.md", "backlot/ui/*"]
 "openmontage.backlot" = ["ui/*"]
 "openmontage.schemas" = ["**/*.json"]
 "*" = ["*.yaml", "*.json", "*.md", "*.html", "*.css", "*.js", "*.ts", "*.tsx", "*.png", "*.svg"]

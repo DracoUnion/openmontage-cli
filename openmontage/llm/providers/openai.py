@@ -60,7 +60,7 @@ _TOOL_DESCRIPTIONS = {
     "load_pipeline": "Load a pipeline manifest (YAML) with its stages, gates, required tools and review focus.",
     "stage_gate_policy": "Return whether a given stage gates on human approval per the pipeline manifest.",
     "load_skill": "Load a stage director / meta skill markdown by relative path (no .md suffix). Read the director skill BEFORE doing a stage.",
-    "load_playbook": "Load a visual style playbook (styles/*.yaml).",
+    "load_playbook": "Load a visual style playbook (openmontage/styles/*.yaml).",
     "list_tools": "List registered production tools, optionally filtered by capability.",
     "run_tool": "Execute a registered OpenMontage tool with JSON inputs. Always put output_path under projects/<project_id>/. This is how you produce assets / narration / renders.",
     "project_init": "Initialise a project workspace under projects/<project_id>/. Call once before working on a project.",

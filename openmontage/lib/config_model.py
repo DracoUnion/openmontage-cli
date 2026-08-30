@@ -57,8 +57,8 @@ class OutputConfig(BaseModel):
 class PathsConfig(BaseModel):
     pipeline_dir: str = "pipeline"
     library_dir: str = "library"
-    styles_dir: str = "styles"
-    skills_dir: str = "skills"
+    styles_dir: str = "openmontage/styles"
+    skills_dir: str = "openmontage/skills"
     output_dir: str = "output"
 
 

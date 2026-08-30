@@ -19,13 +19,11 @@ from pathlib import Path
 from typing import Any, Optional
 
 from .utils.paths import (
-    project_root,
     ensure_root_in_path,
     projects_dir,
     skill_path,
 )
 
-_ROOT = project_root()
 ensure_root_in_path()
 
 # These imports require the project root already on sys.path (done above).
@@ -116,14 +114,12 @@ def load_director_skill(rel: str) -> dict[str, Any]:
 
 
 def load_playbook(name: str) -> dict[str, Any]:
-    import yaml
-    path = _ROOT / "styles" / f"{name}.yaml"
-    if not path.is_file():
-        return {"ok": False, "error": f"no playbook styles/{name}.yaml"}
+    from openmontage.styles.playbook_loader import load_playbook as _load
+
     try:
-        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+        data = _load(name)
     except Exception as exc:
-        return {"ok": False, "error": f"could not parse playbook: {exc}"}
+        return {"ok": False, "error": f"could not load playbook {name!r}: {exc}"}
     return {"ok": True, "name": name, "playbook": data}
 
 

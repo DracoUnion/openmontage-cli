@@ -11,10 +11,10 @@ def _read(relative_path: str) -> str:
 def test_music_plans_discover_all_music_capabilities() -> None:
     instruction_files = [
         "AGENT_GUIDE.md",
-        "skills/pipelines/cinematic/idea-director.md",
-        "skills/pipelines/cinematic/proposal-director.md",
-        "skills/pipelines/documentary-montage/idea-director.md",
-        "skills/pipelines/explainer/proposal-director.md",
+        "openmontage/skills/pipelines/cinematic/idea-director.md",
+        "openmontage/skills/pipelines/cinematic/proposal-director.md",
+        "openmontage/skills/pipelines/documentary-montage/idea-director.md",
+        "openmontage/skills/pipelines/explainer/proposal-director.md",
     ]
 
     for relative_path in instruction_files:
@@ -27,5 +27,5 @@ def test_music_plans_discover_all_music_capabilities() -> None:
 
 def test_explainer_directors_do_not_reference_fictitious_submit_functions() -> None:
     for stage in ("idea", "script", "scene"):
-        text = _read(f"skills/pipelines/explainer/{stage}-director.md")
+        text = _read(f"openmontage/skills/pipelines/explainer/{stage}-director.md")
         assert "handle_explainer_" not in text

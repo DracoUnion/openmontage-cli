@@ -41,16 +41,16 @@ def _taste_profile() -> dict:
 
 
 def test_style_playbook_schema_accepts_taste_profile():
-    schema = _load_json(ROOT / "schemas" / "styles" / "playbook.schema.json")
+    schema = _load_json(ROOT / "openmontage" / "schemas" / "styles" / "playbook.schema.json")
     assert "taste_profile" in schema["properties"]
-    playbook = yaml.safe_load((ROOT / "styles" / "clean-professional.yaml").read_text(encoding="utf-8"))
+    playbook = yaml.safe_load((ROOT / "openmontage" / "styles" / "clean-professional.yaml").read_text(encoding="utf-8"))
     playbook["taste_profile"] = _taste_profile()
 
     jsonschema.validate(instance=playbook, schema=schema)
 
 
 def test_proposal_packet_schema_accepts_taste_profile():
-    schema = _load_json(ROOT / "schemas" / "artifacts" / "proposal_packet.schema.json")
+    schema = _load_json(ROOT / "openmontage" / "schemas" / "artifacts" / "proposal_packet.schema.json")
     proposal = {
         "version": "1.0",
         "concept_options": [
@@ -84,10 +84,10 @@ def test_proposal_packet_schema_accepts_taste_profile():
 
 
 def test_taste_direction_is_discoverable_to_new_agents():
-    skill_path = ROOT / "skills" / "meta" / "taste-direction.md"
+    skill_path = ROOT / "openmontage" / "skills" / "meta" / "taste-direction.md"
     assert skill_path.is_file(), "Missing Layer 2 taste-direction meta skill"
 
-    index = (ROOT / "skills" / "INDEX.md").read_text(encoding="utf-8")
+    index = (ROOT / "openmontage" / "skills" / "INDEX.md").read_text(encoding="utf-8")
     assert "Taste Direction" in index
     assert "meta/taste-direction.md" in index
 
@@ -96,7 +96,7 @@ def test_taste_direction_is_discoverable_to_new_agents():
 
 
 def test_premium_minimalist_playbook_exists_and_validates():
-    from styles.playbook_loader import load_playbook, list_playbooks
+    from openmontage.styles.playbook_loader import load_playbook, list_playbooks
 
     assert "premium-minimalist" in list_playbooks()
     playbook = load_playbook("premium-minimalist")

@@ -1195,7 +1195,7 @@ class VideoCompose(BaseTool):
         if not art_direction_declared:
             issues.append(
                 "atelier warning: no bespoke.art_direction declared. Per "
-                "skills/meta/bespoke-composition.md step 1, every atelier piece must "
+                "openmontage/skills/meta/bespoke-composition.md step 1, every atelier piece must "
                 "commit to a fresh art direction (palette, type, motion, signature "
                 "device) before authoring. Pass edit_decisions.bespoke.art_direction "
                 "as a short note or a path to art-direction.md."
@@ -1230,7 +1230,7 @@ class VideoCompose(BaseTool):
         playbook: dict[str, Any] = {}
         if playbook_name:
             try:
-                from styles.playbook_loader import load_playbook
+                from openmontage.styles.playbook_loader import load_playbook
                 playbook = load_playbook(playbook_name)
             except Exception as exc:
                 logging.getLogger(__name__).warning(
@@ -1749,7 +1749,7 @@ class VideoCompose(BaseTool):
             )
             if playbook_name:
                 try:
-                    from styles.playbook_loader import load_playbook  # type: ignore
+                    from openmontage.styles.playbook_loader import load_playbook  # type: ignore
                     playbook_data = load_playbook(playbook_name)
                 except Exception as exc:
                     logging.getLogger(__name__).warning(

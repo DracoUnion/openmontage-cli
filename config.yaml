@@ -28,6 +28,6 @@ output:
 paths:
   pipeline_dir: pipeline
   library_dir: library
-  styles_dir: styles
-  skills_dir: skills
+  styles_dir: openmontage/styles
+  skills_dir: openmontage/skills
   output_dir: output

@@ -29,7 +29,7 @@ from openmontage.lib.checkpoint import (
 )
 from openmontage.tools.cost_tracker import CostTracker, BudgetMode
 from openmontage.schemas.artifacts import validate_artifact, list_schemas
-from styles.playbook_loader import load_playbook, validate_accessibility
+from openmontage.styles.playbook_loader import load_playbook, validate_accessibility
 
 OUT = os.path.join(os.path.dirname(__file__), "output")
 PIPELINE_DIR = Path(OUT) / "e2e_pipeline"

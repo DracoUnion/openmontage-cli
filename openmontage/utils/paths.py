@@ -26,8 +26,8 @@ def projects_dir() -> Path:
 
 def skill_path(rel: str) -> Path:
     """Resolve a skill file path (e.g. 'pipelines/explainer/script-director')
-    against the skills/ tree."""
-    return project_root() / "skills" / f"{rel}.md"
+    against the package skills/ tree."""
+    return project_root() / "openmontage" / "skills" / f"{rel}.md"
 
 
 def pipeline_path(name: str) -> Path:

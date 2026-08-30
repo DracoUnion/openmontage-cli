@@ -54,7 +54,7 @@ def test_hyperframes_layer2_skill_names_correct_package():
     from pathlib import Path
     body = (
         Path(__file__).resolve().parent.parent.parent
-        / "skills" / "core" / "hyperframes.md"
+        / "openmontage" / "skills" / "core" / "hyperframes.md"
     ).read_text(encoding="utf-8")
     # The dangerous invocation must be called out, not recommended.
     # If `@hyperframes/cli` appears it must be in a warning context.
@@ -90,7 +90,7 @@ def test_animation_proposal_director_has_no_hardcoded_costs_or_keys():
 
     body = (
         Path(__file__).resolve().parent.parent.parent
-        / "skills" / "pipelines" / "animation" / "proposal-director.md"
+        / "openmontage" / "skills" / "pipelines" / "animation" / "proposal-director.md"
     ).read_text(encoding="utf-8")
 
     # Only flag NON-ZERO dollar figures. `$0` and `$0.00` labeling something
