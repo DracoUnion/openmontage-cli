@@ -153,12 +153,12 @@ class Orchestrator:
             if not tool_blocks:
                 # No tool call: the model stopped or is giving plain text. Treat
                 # as a soft stop unless it already finalised.
-                if not summary.finalized:
-                    summary.finalized_message = (
-                        "Model ended without calling finalize."
-                        + (f" Final text: {res}" if res else "")
-                    )
-                break
+                msgs.append({"role": "assistant", "content": res})
+                msgs.append({
+                    "role": "user",
+                    "content": f"No tool calls fount. Please surround tool calls in [tool]...[/tool]. And if you want to stop, call `finalize`.",
+                })
+                continue
 
             print(f'toolcall: {tool_blocks}')
             toolcall_res_list = []
