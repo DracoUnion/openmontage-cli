@@ -269,12 +269,37 @@ def cmd_backlot(args: argparse.Namespace) -> int:
 
 
 def _build_parser() -> argparse.ArgumentParser:
+    openai_key = os.environ.get('OPENAI_API_KEY')
+    openai_url = os.environ.get('OPENAI_BASE_URL')
+    openai_model = os.environ.get('OPENAI_CHAT_MODEL', 'gpt-3.5-turbo')
+    openai_vmodel = os.environ.get('OPENAI_VIS_MODEL', '')
+    openai_tti_model = os.environ.get('OPENAI_TTI_MODEL', '')
+
     parser = argparse.ArgumentParser(
         prog="openmontage",
         description="OpenMontage — AI-Orchestrated Video Production CLI",
         epilog="Tip: run 'openmontage doctor' to check the environment.",
     )
     parser.add_argument("--version", action="version", version=f"openmontage {__version__}")
+        parser.add_argument("-m", "--model", default=openai_model, help="model name")
+    parser.add_argument("-k", "--key", default=openai_key, help="OpenAI API key")
+    parser.add_argument("-r", "--retry", type=int, default=1_000_000, help="times of retry")
+    parser.add_argument("-tm", "--temp", type=float, default=1, help="temperature")
+    parser.add_argument("-tp", "--top-p", type=float, help="top p")
+    parser.add_argument("-fp", "--frequency-penalty", type=float, help="frequency penalty")
+    parser.add_argument("-pp", "--presence-penalty", type=float, help="presence penalty")
+    parser.add_argument("-mt", "--max-tokens", type=int, default=None, help="max tokens")
+    parser.add_argument("-H", "--host", default=openai_url, help="api host")
+    parser.add_argument("--emb", default=os.environ.get('EMB_MODEL_PATH', 'moka-ai/m3e-base'), help="emb model path")
+    parser.add_argument("-vm", "--vmodel", default=openai_vmodel, help="vision model name")
+    parser.add_argument("-im", "--tti-model", default=openai_tti_model, help="vision model name")
+    parser.add_argument("-ua", "--user-agent", default='claude-cli/2.1.41 (external, cli)', help="HTTP User-Agent Header")
+    parser.add_argument("-st", "--stream", action='store_true' , help="stream mode")
+    parser.add_argument("-eb", "--extra-body", help="extra body")
+    parser.add_argument("-ct", "--conn-timeout", type=int, default=60, help="")
+    parser.add_argument("-rt", "--read-timeout", type=int, default=120, help="")
+    parser.add_argument("-rr", "--repetition-regex", default='', help="re for repetition detection")
+    parser.set_defaults(func=lambda x: parser.print_help())
     sub = parser.add_subparsers(dest="command", help="Available commands", metavar="COMMAND")
 
     sub.add_parser("version", help="show version and project root")
