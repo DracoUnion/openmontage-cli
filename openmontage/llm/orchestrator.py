@@ -212,7 +212,7 @@ class Orchestrator:
     def _dispatch(self, name: str, args: dict[str, Any], summary: RunSummary) -> Tuple[Any, str]:
         try:
             if name == "checkpoint_write":
-                return self._checkpoint_write_gated(args, summary)
+                return self._checkpoint_write_gated(args, summary), ""
             return bridge.call(name, args), ""
         except KeyboardInterrupt:
             raise
