@@ -15,7 +15,7 @@ import openai
 import base64
 import logging
 from pydantic import BaseModel, parse_obj_as, ValidationError
-from typing import Dict, Any, List, Tuple
+from typing import Dict, Any, List, Tuple, Callable
 from ..bridge import TOOL_DEFS
 
 logging.getLogger("httpx").setLevel(logging.CRITICAL)
@@ -153,6 +153,18 @@ def repl_ins_token(msgs):
                         repl_ins_token_re(it['text']))
     return msgs
 
+def dispatch_tool(
+    tool_dict: Dict[str, Callable], 
+    name: str, 
+    args: Dict[str, Any],
+) -> Tuple[Any, str]:
+    try:
+        return tool_dict[name](**args), ""
+    except KeyboardInterrupt:
+        raise
+    except Exception as ex:
+        return None, str(ex)
+
 def ask_chatgpt_retry(
     ques, model_name, args,
     parse_output=None,
@@ -207,14 +219,20 @@ def call_llm_with_toolcall(
             ]
             continue
         toolcall_res_list = []
+        toolcall_errmsgs = []
         for tc in toolcalls:
-            tc_res = tool_dict[tc.tool](**tc.parameters)
+            tc_res, errmsg = dispatch_tool(tool_dict, tc.tool, tc.parameters)
+            if errmsg:
+                toolcall_errmsgs.append(errmsg)
+                continue
             toolcall_res_list.append({'id': tc.id, 'result': tc_res})
         toolcall_res_str = json.dumps(toolcall_res_list)
         msgs += [
             {'role': 'assistant', 'content': res}, 
             {'role': 'user', 'content': f'[tool-result]{toolcall_res_str}[/tool-result]'}
         ]
+        if toolcall_errmsgs:
+            msgs.append({'role': 'user', 'content': '\n'.join(toolcall_errmsgs)})
     
     return res
 
