@@ -187,32 +187,8 @@ def call_llm_with_toolcall(
             'role': 'system', 
             'content': toolcall_pmt
         }] + msgs
-        res =  call_llm(
-            msgs, model_name, 
-            temp=temp, 
-            top_p=top_p,
-            frequency_penalty=frequency_penalty,
-            presence_penalty=presence_penalty,
-            max_tokens=max_tokens,
-            extra_body=extra_body,
-        )
-        
-        toolcalls, errmsg = parse_toolcall(res)
-        while m:
-            toolcalls = json.loads(m.group(1))
-            toolcall_res_list = []
-            for tc in toolcalls:
-                tc_res = tool_dict[tc['tool']](**tc['parameters'])
-                toolcall_res_list.append({'id': tc['id'], 'result': tc_res})
-            toolcall_res_str = json.dumps(toolcall_res_list)
-            msgs += [{
-                'role': 'assistant',
-                'content': res
-            }, {
-                'role': 'user',
-                'content': f'[tool-result]{toolcall_res_str}[/tool-result]'
-            }]
-            res =  call_llm(
+        while True:
+            res = call_llm(
                 msgs, model_name, 
                 temp=temp, 
                 top_p=top_p,
@@ -221,7 +197,24 @@ def call_llm_with_toolcall(
                 max_tokens=max_tokens,
                 extra_body=extra_body,
             )
-            m = re.search(TOOLCALL_RE, res)
+            toolcalls, errmsg = parse_toolcall(res)
+            if not errmsg and not toolcalls:
+                break
+            if errmsg:
+                msgs += [
+                    {"role": "assistant", "content": res},
+                    {"role": "user", "content": errmsg},
+                ]
+                continue
+            toolcall_res_list = []
+            for tc in toolcalls:
+                tc_res = tool_dict[tc.tool](**tc.parameters)
+                toolcall_res_list.append({'id': tc.id, 'result': tc_res})
+            toolcall_res_str = json.dumps(toolcall_res_list)
+            msgs += [
+                {'role': 'assistant', 'content': res}, 
+                {'role': 'user', 'content': f'[tool-result]{toolcall_res_str}[/tool-result]'}
+            ]
         
         return res
 
