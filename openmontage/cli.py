@@ -332,6 +332,7 @@ def _build_parser() -> argparse.ArgumentParser:
     for name, plan_only in (("make", None), ("plan", True), ("run", False), ("resume", False)):
         p = sub.add_parser(name, help=f"run a production from a natural-language request")
         p.add_argument("request", help="natural-language video brief")
+        p.add_argument("-D", "--debug", action='store_true', help="debug mode")
         p.add_argument("-p", "--pipeline", default="animated-explainer", help="pipeline manifest (default: animated-explainer)")
         p.add_argument("-d", "--duration", default=None, help="target duration (e.g. 45s or 60)")
         p.add_argument("-t", "--title", default=None, help="production title")

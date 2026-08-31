@@ -12,9 +12,11 @@ import sys
 import traceback
 from dataclasses import dataclass
 from typing import Any, Optional
+import logging
 
 from . import config, bridge
 from .gates import GatePolicy
+from .llm.openai import logger as oai_logger
 
 
 def parse_duration(raw: Optional[str]) -> Optional[int]:
@@ -54,6 +56,8 @@ def make(args) -> MakeResult:
 
     Returns a rich result object.
     """
+    if args.debug:
+        oai_logger.setLevel(logging.DEBUG)
     request = args.request
     pipeline = getattr(args, "pipeline", "animated-explainer")
     duration = getattr(args, "duration", None)
