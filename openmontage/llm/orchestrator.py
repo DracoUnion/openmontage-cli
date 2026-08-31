@@ -17,7 +17,7 @@ on top of OpenMontage's own checkpoint gate rules.
 
 from __future__ import annotations
 
-import json
+import json, json_repair
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Optional
@@ -209,7 +209,7 @@ class Orchestrator:
         if not m:
             return []
         try:
-            blocks = json.loads(m.group(1))
+            blocks = json_repair.loads(m.group(1))
         except json.JSONDecodeError:
             return []
         if not isinstance(blocks, list):
