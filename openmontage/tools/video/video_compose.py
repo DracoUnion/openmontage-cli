@@ -1230,7 +1230,7 @@ class VideoCompose(BaseTool):
         playbook: dict[str, Any] = {}
         if playbook_name:
             try:
-                from openmontage.styles.playbook_loader import load_playbook
+                from ...styles.playbook_loader import load_playbook
                 playbook = load_playbook(playbook_name)
             except Exception as exc:
                 logging.getLogger(__name__).warning(
@@ -1749,7 +1749,7 @@ class VideoCompose(BaseTool):
             )
             if playbook_name:
                 try:
-                    from openmontage.styles.playbook_loader import load_playbook  # type: ignore
+                    from ...styles.playbook_loader import load_playbook  # type: ignore
                     playbook_data = load_playbook(playbook_name)
                 except Exception as exc:
                     logging.getLogger(__name__).warning(

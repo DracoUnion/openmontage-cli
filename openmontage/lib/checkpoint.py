@@ -101,7 +101,7 @@ def _validate_style_playbook(style_playbook: str | None) -> None:
     if style_playbook is None:
         return
     try:
-        from openmontage.styles.playbook_loader import list_playbooks, load_playbook
+        from ..styles.playbook_loader import list_playbooks, load_playbook
 
         load_playbook(style_playbook)
     except Exception as exc:

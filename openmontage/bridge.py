@@ -114,7 +114,7 @@ def load_director_skill(rel: str) -> dict[str, Any]:
 
 
 def load_playbook(name: str) -> dict[str, Any]:
-    from openmontage.styles.playbook_loader import load_playbook as _load
+    from .styles.playbook_loader import load_playbook as _load
 
     try:
         data = _load(name)
