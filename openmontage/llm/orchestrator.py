@@ -20,7 +20,7 @@ from __future__ import annotations
 import json, json_repair
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from typing import Any, Optional
+from typing import Any, Optional, Tuple
 
 from .. import bridge
 from ..gates import GatePolicy, Resolution
@@ -165,6 +165,7 @@ class Orchestrator:
 
             print(f'toolcall: {tool_blocks}')
             toolcall_res_list = []
+            toolcall_errmsgs = []
             for tc in tool_blocks:
                 summary.tool_calls += 1
                 # finalize ends the run immediately.
@@ -172,7 +173,10 @@ class Orchestrator:
                     summary.finalized = True
                     summary.finalized_message = tc.parameters.get("message", "")
                     return summary
-                result = self._dispatch(tc.tool, tc.parameters, summary)
+                result, errmsg = self._dispatch(tc.tool, tc.parameters, summary)
+                if errmsg:
+                    toolcall_errmsgs.append(errmsg)
+                    continue
                 # After a blocked gated stage, if the host paused (no --yes),
                 # surface the pause and halt.
                 if result.get("_gate_paused"):
@@ -190,6 +194,11 @@ class Orchestrator:
                 "role": "user",
                 "content": f"[tool-result]{toolcall_res_str}[/tool-result]",
             })
+            if toolcall_errmsgs:
+                msgs.append({
+                    "role": "user",
+                    "content": '\n'.join(toolcall_errmsgs),
+                })
         if not summary.finalized:
             summary.finalized_message = (
                 summary.finalized_message
@@ -200,10 +209,15 @@ class Orchestrator:
 
     # -- dispatch, with gate policy enforcement on checkpoint_write --------
 
-    def _dispatch(self, name: str, args: dict[str, Any], summary: RunSummary) -> dict[str, Any]:
-        if name == "checkpoint_write":
-            return self._checkpoint_write_gated(args, summary)
-        return bridge.call(name, args)
+    def _dispatch(self, name: str, args: dict[str, Any], summary: RunSummary) -> Tuple[Any, str]:
+        try:
+            if name == "checkpoint_write":
+                return self._checkpoint_write_gated(args, summary)
+            return bridge.call(name, args), ""
+        except KeyboardInterrupt:
+            raise
+        except Exception as ex:
+            return None, str(ex)
 
     def _checkpoint_write_gated(
         self, args: dict[str, Any], summary: RunSummary
