@@ -18,6 +18,7 @@
 <p align="center">
   <a href="#start-from-a-video-you-already-love">Paste A Video</a> &nbsp;·&nbsp;
   <a href="#quick-start">Quick Start</a> &nbsp;·&nbsp;
+  <a href="#environment-variables">Env Vars</a> &nbsp;·&nbsp;
   <a href="#try-these-prompts">Try These Prompts</a> &nbsp;·&nbsp;
   <a href="#pipelines">Pipelines</a> &nbsp;·&nbsp;
   <a href="#how-it-works">How It Works</a> &nbsp;·&nbsp;
@@ -276,6 +277,116 @@ VIDEO_GEN_LOCAL_MODEL=wan2.1-1.3b  # or wan2.1-14b, hunyuan-1.5, ltx2-local, cog
 ```
 
 </details>
+
+---
+
+## Environment Variables
+
+OpenMontage reads all configuration from environment variables. Copy [`.env.example`](.env.example) to `.env` and fill in the keys you have — **every token/key is optional**; the more you add, the more providers the tool registry can use (run `openmontage doctor` to see your configured vs. available capability counts).
+
+The tables below bundle the variables by category. Variables shown as *aliases* are read interchangeably; the first one present wins.
+
+### Runtime & orchestration
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `OPENMONTAGE_MODEL` | `gpt-4o` | Orchestrator LLM model id. |
+| `OPENMONTAGE_MAX_TURNS` | `80` | Cap on orchestrator tool-call turns before it gives up. |
+| `OPENMONTAGE_BUDGET_USD` | `10.0` | Default production budget ceiling. |
+| `OPENMONTAGE_PROJECTS_DIR` | `<cwd>/projects` | Root for production workspaces (checkpoints, artifacts, renders, Backlot watch). |
+| `OPENMONTAGE_CACHE_DIR` | derived | Directory for the shared clip cache. |
+| `OPENMONTAGE_CACHE_MAX_GB` | `20` | Size cap (GB) for the clip cache. |
+| `BACKLOT_PORT` | derived | Port for the Backlot board server. |
+| `PYTHONUTF8` / `PYTHONIOENCODING` | `1` / `utf-8` | Forced by the package so stdio and subprocess output default to UTF-8 (idempotent startup hook). |
+
+### LLM / OpenAI
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `OPENAI_API_KEY` | — | Orchestrator auth; also OpenAI TTS, GPT Image, and Sora when routed through OpenAI. |
+| `OPENAI_BASE_URL` | — | OpenAI-compatible API host override. |
+| `OPENAI_CHAT_MODEL` | `gpt-3.5-turbo` | Default chat model (CLI `-m`). |
+| `OPENAI_VIS_MODEL` | — | Vision model id. |
+| `OPENAI_TTI_MODEL` | — | Text-to-image model id. |
+| `EMB_MODEL_PATH` | `moka-ai/m3e-base` | Embedding model path. |
+
+### Image, video & audio gateways
+
+| Variable | Purpose |
+|---|---|
+| `FAL_KEY` / `FAL_AI_API_KEY` *(aliases)* | fal.ai gateway: FLUX + Seedream images, Google Veo / Kling / MiniMax / LTX2 / Recraft video, Seedance via fal, fal-hosted ElevenLabs TTS/music. |
+| `ATLASCLOUD_API_KEY` / `ATLAS_CLOUD_API_KEY` / `ATLAS_API_KEY` *(aliases)* | Atlas Cloud — Seedream/Nano Banana/GPT Image + Kling/Seedance/Hailuo video + 3D assets. |
+| `HEYGEN_API_KEY` | HeyGen gateway — VEO, Sora, Runway, Kling, Seedance video from one key. |
+
+### Provider-specific
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `MINIMAX_API_KEY` / `MINIMAX_REGION` (`global`) / `MINIMAX_BASE_URL` | — | MiniMax official: image, Hailuo (older) video. |
+| `REPLICATE_API_TOKEN` | — | Replicate-hosted Seedance video. |
+| `HIGGSFIELD_API_KEY` + `HIGGSFIELD_API_SECRET` (or combined `HIGGSFIELD_KEY`) | — | Higgsfield video/cloud. |
+| `KLING_API_KEY` / `KLING_API_BASE_URL` | Singapore endpoint | Official Kling: video, image, TTS, avatar, lip sync. |
+| `ELEVENLABS_API_KEY` | — | ElevenLabs TTS, music, sound effects. |
+| `XAI_API_KEY` | — | xAI Grok image generation/edits + Grok video. |
+| `DOUBAO_SPEECH_API_KEY` / `DOUBAO_SPEECH_VOICE_TYPE` | — | Volcengine Doubao Speech TTS. |
+| `FISH_AUDIO_API_KEY` | — | fish.audio TTS (s1 / s2-pro / s2.1-pro, voice cloning). |
+| `DASHSCOPE_API_KEY` | — | DashScope (Bailian): Qwen image / TTS / ASR. |
+| `TENCENT_TOKENHUB_API_KEY` | — | Tencent Hunyuan image + cloud video (Bearer). |
+| `SUNO_API_KEY` | — | Suno AI music. |
+| `ARK_API_KEY` / `ARK_BASE_URL` / `ARK_SEEDANCE_MODEL` / `ARK_CNY_PER_USD` (`7.2`) | — | Volcengine Ark direct: Seedance 2.0/2.5. |
+| `RUNWAY_API_KEY` / `RUNWAYML_API_SECRET` *(aliases)* | — | Runway Gen-4. |
+| `VOLC_ACCESSKEY` + `VOLC_SECRETKEY` | — | Volcengine Jimeng (即梦) video, HMAC-SHA256 signing. |
+| `MODAL_LTX2_ENDPOINT_URL` | — | Modal self-hosted LTX-2 endpoint. |
+| `VIDEO_GEN_LOCAL_ENABLED` / `VIDEO_GEN_LOCAL_MODEL` | — | Free local GPU video gen (wan2.1-*, hunyuan, ltx2-local, cogvideo-5b). |
+
+### Speech recognition & cloud TTS (Azure)
+
+| Variable | Purpose |
+|---|---|
+| `AZURE_SPEECH_KEY` | Azure AI Speech key — unlocks both `azure_stt` and `azure_tts`. |
+| `AZURE_SPEECH_REGION` | Region for the Speech resource (used unless a full endpoint is given). |
+| `AZURE_SPEECH_ENDPOINT` | Optional full custom STT endpoint URL (overrides region). |
+| `AZURE_TTS_ENDPOINT` | Optional full custom TTS host. |
+| `HF_TOKEN` | HuggingFace token — enables speaker diarization in the transcriber. |
+
+### ComfyUI
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `COMFYUI_SERVER_URL` | `localhost:8188` | Shared ComfyUI server. |
+| `COMFYUI_IMAGE_SERVER_URL` / `COMFYUI_VIDEO_SERVER_URL` / `COMFYUI_MUSIC_SERVER_URL` | `COMFYUI_SERVER_URL` | Per-capability server overrides. |
+
+### Google
+
+| Variable | Purpose |
+|---|---|
+| `GOOGLE_API_KEY` / `GEMINI_API_KEY` *(aliases)* | Google tokens — Imagen images, Google TTS, Gemini Omni video. |
+| `GOOGLE_APPLICATION_CREDENTIALS` | Path to a service-account JSON key file (alternative to the API key). |
+| `GOOGLE_CLOUD_PROJECT` / `GOOGLE_CLOUD_PROJECT_ID` / `GCLOUD_PROJECT` *(aliases)* | GCP project id (required for Imagen via Vertex AI). |
+| `GOOGLE_CLOUD_LOCATION` | Vertex AI region (default `us-central1`). |
+| `GOOGLE_GENAI_USE_VERTEXAI` / `GOOGLE_GENAI_USE_ENTERPRISE` | Set `true`/`1` to force Vertex / enterprise auth. |
+| `GOOGLE_TTS_API_KEY` | Google Cloud TTS key (falls back to `GOOGLE_API_KEY`/`GEMINI_API_KEY`). |
+
+### Stock media & libraries
+
+| Variable | Purpose |
+|---|---|
+| `PEXELS_API_KEY` / `PIXABAY_API_KEY` / `UNSPLASH_ACCESS_KEY` | Free stock footage/images. |
+| `COVERR_API_KEY` / `NARA_API_KEY` / `VIDEVO_API_KEY` / `POND5_API_KEY` | Stock footage sources. |
+| `FREESOUND_API_KEY` | Freesound music/sound effects. |
+| `MUSIC_LIBRARY_DIR` | Override the royalty-free local music library directory. |
+
+### Local installs & system
+
+| Variable | Purpose |
+|---|---|
+| `WAV2LIP_PATH` | Path to a cloned Wav2Lip repo (local lip sync). |
+| `SADTALKER_PATH` | Path to a cloned SadTalker repo (local talking-head avatars). |
+| `BLENDER_PATH` | Path to Blender (3D world rendering). |
+| `DISPLAY` | X display for Linux screen recording (default `:0.0`). |
+| `LOCALAPPDATA` / `PROGRAMFILES` / `APPDATA` | Standard Windows paths used to locate the Cap recorder. |
+
+These variables also flow into the tool registry's **setup offers** — `openmontage capabilities` surfaces which providers are one env-var away from being configured.
 
 ---
 
