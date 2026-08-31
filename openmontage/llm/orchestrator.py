@@ -122,16 +122,12 @@ Note that tool calls must be surrounded in "[tool]...[/tool]".
 class Orchestrator:
     def __init__(
         self,
+        args,
         *,
         gate_policy: Optional[GatePolicy] = None,
-        max_turns: Optional[int] = None,
-        model: Optional[str] = None,
-        llm_call=None,
     ) -> None:
+        self.args = args
         self.gate_policy = gate_policy or GatePolicy(yes=True)
-        self.max_turns = max_turns or config.max_turns()
-        self.model = model
-        self._llm_call = llm_call
 
     # -- gate override: the host may block a 'completed' write on a gated
     #    stage unless the CLI policy says approve. We enforce it at the bridge
@@ -145,10 +141,18 @@ class Orchestrator:
             {"role": "user", "content": build_user_prompt(request, helper_hint)},
         ]
         summary = RunSummary()
-        max_iter = self.max_turns
-        for _ in range(max_iter):
+        for _ in range(self.args.max_turns):
             summary.turns += 1
-            res = self._call_llm(msgs)
+            res = om_openai.call_llm_retry(
+                    msgs, self.args.model,
+                    retry=self.args.retry, 
+                    temp=self.args.temp, 
+                    top_p=self.args.top_p,
+                    frequency_penalty=self.args.frequency_penalty,
+                    presence_penalty=self.args.presence_penalty,
+                    max_tokens=self.args.max_tokens,
+                    extra_body=self.args.extra_body,
+            )
             tool_blocks = self._parse_toolcall(res)
             if not tool_blocks:
                 # No tool call: the model stopped or is giving plain text. Treat
@@ -192,20 +196,9 @@ class Orchestrator:
         if not summary.finalized:
             summary.finalized_message = (
                 summary.finalized_message
-                or f"Reached max turns ({max_iter}) without finalize."
+                or f"Reached max turns ({self.args.max_turns}) without finalize."
             )
         return summary
-
-    # -- LLM call: use llm/openai.py's call_llm (text protocol). Overridable
-    #    seam so tests can script responses without hitting the network.
-
-    def _call_llm(self, msgs: list[dict[str, Any]]) -> str:
-        if self._llm_call is not None:
-            return self._llm_call(msgs, self.model)
-        return om_openai.call_llm(
-            msgs, self.model,
-            temp=0.3, top_p=0.95,
-        )
 
     @staticmethod
     def _parse_toolcall(res: str) -> list[dict[str, Any]]:

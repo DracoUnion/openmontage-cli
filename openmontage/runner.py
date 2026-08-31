@@ -84,7 +84,7 @@ def make(args) -> MakeResult:
 
     from .llm.orchestrator import Orchestrator
 
-    orch = Orchestrator(gate_policy=policy, model=model)
+    orch = Orchestrator(args, gate_policy=policy)
 
     try:
         summary = orch.run(request, helper_hint=helper)

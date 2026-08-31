@@ -347,6 +347,9 @@ def _build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: Optional[list[str]] = None) -> int:
+    from .utils.utf8 import configure_utf8
+    configure_utf8()
+
     parser = _build_parser()
     args = parser.parse_args(argv)
 

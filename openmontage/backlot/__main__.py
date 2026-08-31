@@ -87,6 +87,9 @@ def cmd_serve(port: int) -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
+    from ..utils.utf8 import configure_utf8
+    configure_utf8()
+
     parser = argparse.ArgumentParser(prog="backlot", description=__doc__)
     sub = parser.add_subparsers(dest="command")
 
