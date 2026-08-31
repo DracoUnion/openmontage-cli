@@ -179,7 +179,7 @@ class Orchestrator:
                     summary.finalized_message = result.get("_gate_pause_msg", "")
                     return summary
                 toolcall_res_list.append({
-                    "id": tc.get("id", ""),
+                    "id": tc.id,
                     "result": _render_result(result),
                 })
             
