@@ -153,14 +153,15 @@ class Orchestrator:
                     max_tokens=self.args.max_tokens,
                     extra_body=self.args.extra_body,
             )
-            tool_blocks = self._parse_toolcall(res)
-            if not tool_blocks:
+            tool_blocks, errmsg = om_openai.parse_toolcall(res)
+            if errmsg or not tool_blocks:
                 # No tool call: the model stopped or is giving plain text. Treat
                 # as a soft stop unless it already finalised.
                 msgs.append({"role": "assistant", "content": res})
                 msgs.append({
                     "role": "user",
-                    "content": f"No tool calls found. Please surround tool calls in [tool]...[/tool]. And if you want to stop, call `finalize`.",
+                    "content": errmsg or \
+                               f"No tool calls found. Please surround tool calls in [tool]...[/tool]. And if you want to stop, call `finalize`.",
                 })
                 continue
 
@@ -200,21 +201,6 @@ class Orchestrator:
             )
         return summary
 
-    @staticmethod
-    def _parse_toolcall(res: str) -> list[dict[str, Any]]:
-        """Parse the first [tool]...[/tool] block in a response into a list of
-        tool-call dicts (id / tool / parameters). Mirrors llm/openai.py."""
-        import re
-        m = re.search(r"\[tool\]([\s\S]+)\[/tool\]", res)
-        if not m:
-            return []
-        try:
-            blocks = json_repair.loads(m.group(1))
-        except json.JSONDecodeError:
-            return []
-        if not isinstance(blocks, list):
-            return []
-        return blocks
 
     # -- dispatch, with gate policy enforcement on checkpoint_write --------
 

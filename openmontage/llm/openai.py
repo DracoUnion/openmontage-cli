@@ -7,13 +7,15 @@ OpenAI function, plus plain-language tool descriptions.
 """
 
 from __future__ import annotations
-from typing import Any
 import traceback
 import json
+import json_repair
 import re
 import openai
 import base64
 import logging
+from pydantic import BaseModel, parse_obj_as, ValidationError
+from typing import Dict, Any, List
 from ..bridge import TOOL_DEFS
 
 logging.getLogger("httpx").setLevel(logging.CRITICAL)
@@ -71,6 +73,29 @@ TOOLCALL_PMT = '''
 
 请注意，上述只是个示例，并不代表`plus_one`和`plus_minus`真实存在。
 '''
+
+class ToolCallItem(BaseModel):
+    id: str
+    tool: str
+    parameters: Dict[str, Any]
+
+def parse_toolcall(res: str) -> list[dict[str, Any]]:
+    """Parse the first [tool]...[/tool] block in a response into a list of
+    tool-call dicts (id / tool / parameters). Mirrors llm/openai.py."""
+    m = re.search(r"\[tool\]([\s\S]+)\[/tool\]", res)
+    if not m:
+        return [], ""
+    try:
+        blocks = parse_obj_as(
+            List[ToolCallItem],
+            json_repair.loads(m.group(1)),
+        )
+        return blocks, ""
+    except json.JSONDecodeError as ex:
+        return [], str(ex)
+    except ValidationError as ex:
+        return [], str(ex)
+
 
 def call_vlm_retry(
     img, ques, model_name, args,
