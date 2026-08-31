@@ -368,7 +368,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     # Import lazily so the read-only commands still work even if an LLM
     # dependency (openai) is missing.
     if args.command in ("make", "plan", "run", "resume"):
-        from .commands.make_cmd import (
+        from .make_cmd import (
             cmd_make, cmd_plan, cmd_run, cmd_resume,
         )
         command_map.update({
