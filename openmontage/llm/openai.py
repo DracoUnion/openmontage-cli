@@ -15,7 +15,7 @@ import openai
 import base64
 import logging
 from pydantic import BaseModel, parse_obj_as, ValidationError
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Tuple
 from ..bridge import TOOL_DEFS
 
 logging.getLogger("httpx").setLevel(logging.CRITICAL)
@@ -79,7 +79,7 @@ class ToolCallItem(BaseModel):
     tool: str
     parameters: Dict[str, Any]
 
-def parse_toolcall(res: str) -> list[dict[str, Any]]:
+def parse_toolcall(res: str) -> Tuple[List[ToolCallItem], str]:
     """Parse the first [tool]...[/tool] block in a response into a list of
     tool-call dicts (id / tool / parameters). Mirrors llm/openai.py."""
     m = re.search(r"\[tool\]([\s\S]+)\[/tool\]", res)
@@ -197,8 +197,7 @@ def call_llm_with_toolcall(
             extra_body=extra_body,
         )
         
-        TOOLCALL_RE = r'\[tool\]([\s\S]+)\[/tool\]'
-        m = re.search(TOOLCALL_RE, res)
+        toolcalls, errmsg = parse_toolcall(res)
         while m:
             toolcalls = json.loads(m.group(1))
             toolcall_res_list = []

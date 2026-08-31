@@ -157,26 +157,22 @@ class Orchestrator:
             if errmsg or not tool_blocks:
                 # No tool call: the model stopped or is giving plain text. Treat
                 # as a soft stop unless it already finalised.
+                errmsg = errmsg or \
+                    f"No tool calls found. Please surround tool calls in [tool]...[/tool]. And if you want to stop, call `finalize`."
                 msgs.append({"role": "assistant", "content": res})
-                msgs.append({
-                    "role": "user",
-                    "content": errmsg or \
-                               f"No tool calls found. Please surround tool calls in [tool]...[/tool]. And if you want to stop, call `finalize`.",
-                })
+                msgs.append({"role": "user", "content": errmsg})
                 continue
 
             print(f'toolcall: {tool_blocks}')
             toolcall_res_list = []
             for tc in tool_blocks:
                 summary.tool_calls += 1
-                name = tc.get("tool", "")
-                args = tc.get("parameters") or {}
                 # finalize ends the run immediately.
-                if name == "finalize":
+                if tc.tool == "finalize":
                     summary.finalized = True
-                    summary.finalized_message = args.get("message", "")
+                    summary.finalized_message = tc.parameters.get("message", "")
                     return summary
-                result = self._dispatch(name, args, summary)
+                result = self._dispatch(tc.tool, tc.parameters, summary)
                 # After a blocked gated stage, if the host paused (no --yes),
                 # surface the pause and halt.
                 if result.get("_gate_paused"):
