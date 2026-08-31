@@ -11,8 +11,8 @@ import argparse
 import sys
 from typing import Optional
 
-from ..runner import MakeResult, make
-from ..llm.openai import set_openai_props
+from .runner import MakeResult, make
+from .llm.openai import set_openai_props
 
 
 def _print_result(res: MakeResult) -> None:
