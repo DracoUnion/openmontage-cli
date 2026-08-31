@@ -385,6 +385,8 @@ class VideoCompose(BaseTool):
                 ],
                 stderr=subprocess.STDOUT,
                 text=True,
+                encoding="utf-8",
+                errors="replace",
             )
             return "audio" in out
         except Exception:
@@ -2249,7 +2251,7 @@ class VideoCompose(BaseTool):
                 "ffprobe", "-v", "quiet", "-print_format", "json",
                 "-show_format", "-show_streams", str(output_path),
             ]
-            proc = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+            proc = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=30)
             if proc.returncode == 0:
                 probe_data = json.loads(proc.stdout)
                 fmt = probe_data.get("format", {})
@@ -2386,7 +2388,7 @@ class VideoCompose(BaseTool):
                     "-af", "volumedetect", "-f", "null", "-",
                 ]
                 proc = subprocess.run(
-                    cmd, capture_output=True, text=True, timeout=60
+                    cmd, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=60
                 )
                 stderr = proc.stderr or ""
                 # Parse mean_volume and max_volume
@@ -2541,7 +2543,7 @@ class VideoCompose(BaseTool):
                         str(output_path),
                     ]
                     proc = subprocess.run(
-                        cmd, capture_output=True, text=True, timeout=15
+                        cmd, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=15
                     )
                     if proc.returncode == 0:
                         sub_data = json.loads(proc.stdout)

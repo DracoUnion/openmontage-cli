@@ -293,7 +293,7 @@ class VideoUnderstand(BaseTool):
                     "-y", "-loglevel", "error",
                 ]
 
-            subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+            subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=60)
 
             # Load extracted frames
             frame_files = sorted(tmp.glob("frame_*.png"))

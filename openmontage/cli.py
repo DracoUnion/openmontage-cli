@@ -313,18 +313,18 @@ def _build_parser() -> argparse.ArgumentParser:
     p_pipe_show.add_argument("name", help="pipeline name (see 'openmontage pipelines')")
 
     p_tools = sub.add_parser("tools", help="list discovered production tools")
-    p_tools.add_argument("--json", action="store_true", help="output JSON")
-    p_tools.add_argument("--all", action="store_true", help="include unavailable tools")
+    p_tools.add_argument("-j", "--json", action="store_true", help="output JSON")
+    p_tools.add_argument("-a", "--all", action="store_true", help="include unavailable tools")
 
     p_caps = sub.add_parser("capabilities", help="show capability/provider menu")
-    p_caps.add_argument("--json", action="store_true", help="output JSON")
+    p_caps.add_argument("-j", "--json", action="store_true", help="output JSON")
 
     p_init = sub.add_parser("init", help="initialize a new production project")
     p_init.add_argument("project_id", help="kebab-case project identifier")
-    p_init.add_argument("--title", required=True, help="human-readable production title")
-    p_init.add_argument("--pipeline", required=True, help="pipeline type (see 'openmontage pipelines')")
-    p_init.add_argument("--style", default=None, help="optional style playbook")
-    p_init.add_argument("--open", action="store_true", help="open the Backlot board after init")
+    p_init.add_argument("-t", "--title", required=True, help="human-readable production title")
+    p_init.add_argument("-p", "--pipeline", required=True, help="pipeline type (see 'openmontage pipelines')")
+    p_init.add_argument("-s", "--style", default=None, help="optional style playbook")
+    p_init.add_argument("-o", "--open", action="store_true", help="open the Backlot board after init")
 
     p_backlot = sub.add_parser("backlot", help="open the Backlot board in a browser")
     p_backlot.add_argument("project_id", nargs="?", default=None, help="project to focus the board on")
@@ -332,17 +332,17 @@ def _build_parser() -> argparse.ArgumentParser:
     for name, plan_only in (("make", None), ("plan", True), ("run", False), ("resume", False)):
         p = sub.add_parser(name, help=f"run a production from a natural-language request")
         p.add_argument("request", help="natural-language video brief")
-        p.add_argument("--pipeline", default="animated-explainer", help="pipeline manifest (default: animated-explainer)")
-        p.add_argument("--duration", default=None, help="target duration (e.g. 45s or 60)")
-        p.add_argument("--title", default=None, help="production title")
-        p.add_argument("--project", default=None, help="project id override (kebab-case)")
+        p.add_argument("-p", "--pipeline", default="animated-explainer", help="pipeline manifest (default: animated-explainer)")
+        p.add_argument("-d", "--duration", default=None, help="target duration (e.g. 45s or 60)")
+        p.add_argument("-t", "--title", default=None, help="production title")
+        p.add_argument("-pj", "--project", default=None, help="project id override (kebab-case)")
         if plan_only is not None and plan_only:
-            p.add_argument("--plan-only", action="store_true", default=True, help=argparse.SUPPRESS)
+            p.add_argument("-po", "--plan-only", action="store_true", default=True, help=argparse.SUPPRESS)
         else:
-            p.add_argument("--plan-only", action="store_true", default=False, help="stop after planning; do not generate assets or render")
-        p.add_argument("--yes", action="store_true", default=False, help="auto-approve every approval gate")
-        p.add_argument("--om-root", default=None, help="project root override")
-        p.add_argument("--max-turns", type=int, default=80, help="max turns")
+            p.add_argument("-po", "--plan-only", action="store_true", default=False, help="stop after planning; do not generate assets or render")
+        p.add_argument("-y", "--yes", action="store_true", default=False, help="auto-approve every approval gate")
+        p.add_argument("-or", "--om-root", default=None, help="project root override")
+        p.add_argument("-mt", "--max-turns", type=int, default=80, help="max turns")
 
     return parser
 
