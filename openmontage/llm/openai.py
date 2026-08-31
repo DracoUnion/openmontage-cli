@@ -153,7 +153,7 @@ def repl_ins_token(msgs):
                         repl_ins_token_re(it['text']))
     return msgs
 
-def dispatch_tool(
+def dispatch_tools(
     tool_dict: Dict[str, Callable], 
     name: str, 
     args: Dict[str, Any],
@@ -221,7 +221,7 @@ def call_llm_with_toolcall(
         toolcall_res_list = []
         toolcall_errmsgs = []
         for tc in toolcalls:
-            tc_res, errmsg = dispatch_tool(tool_dict, tc.tool, tc.parameters)
+            tc_res, errmsg = dispatch_tools(tool_dict, tc.tool, tc.parameters)
             if errmsg:
                 toolcall_errmsgs.append(errmsg)
                 continue
