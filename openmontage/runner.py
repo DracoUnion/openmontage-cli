@@ -47,29 +47,22 @@ def _make_project_id(request: str, overrides: Optional[str]) -> str:
     return slug or "production"
 
 
-def make(
-    request: str,
-    *,
-    pipeline: str = "animated-explainer",
-    duration: Optional[int] = None,
-    title: Optional[str] = None,
-    project: Optional[str] = None,
-    plan_only: bool = False,
-    yes: bool = False,
-    model: Optional[str] = None,
-    om_root: Optional[str] = None,
-) -> MakeResult:
-    """Run a single-command production. Returns a rich result object.
+def make(args) -> MakeResult:
+    """Run a single-command production. Accepts the CLI args Namespace directly
+    (request, pipeline, duration, title, project, plan_only, yes, model, om_root)
+    so the command handlers don't have to unpack individual attributes.
 
-    Args:
-        request: natural-language video brief.
-        pipeline: pipeline manifest name.
-        duration: target duration in seconds (optional).
-        plan_only: stop after planning; never reach an asset/approval gate.
-        yes: auto-approve every gate (full autonomous run).
-        model: orchestrator model id (defaults to config).
-        om_root: retained for CLI compatibility; paths use the installed package.
+    Returns a rich result object.
     """
+    request = args.request
+    pipeline = getattr(args, "pipeline", "animated-explainer")
+    duration = getattr(args, "duration", None)
+    title = getattr(args, "title", None)
+    project = getattr(args, "project", None)
+    plan_only = bool(getattr(args, "plan_only", False))
+    yes = bool(getattr(args, "yes", False))
+    model = getattr(args, "model", None)
+    om_root = getattr(args, "om_root", None)
 
     if om_root:
         # Retained for CLI compatibility; package paths are resolved internally.
@@ -83,7 +76,6 @@ def make(
             "run the LLM orchestrator.",
         )
 
-    plan_only = plan_only or False
     policy = GatePolicy(yes=yes, plan_only=plan_only)
     proj = _make_project_id(request, project)
     effective_title = title or (request.capitalize()[:80])

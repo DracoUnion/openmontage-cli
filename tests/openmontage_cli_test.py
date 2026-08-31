@@ -143,7 +143,9 @@ def test_runner_requires_api_key_to_be_set(monkeypatch):
     # Simulate no key configured -> runner must fail fast with a clear message.
     from openmontage import runner, config
     monkeypatch.setattr(config, "has_api_key", lambda: False)
-    res = runner.make("some request")
+    from argparse import Namespace
+    args = Namespace(request="some request")
+    res = runner.make(args)
     assert res.ok is False
     assert "OPENAI_API_KEY" in res.message
 

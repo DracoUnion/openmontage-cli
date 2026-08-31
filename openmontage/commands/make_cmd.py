@@ -27,34 +27,17 @@ def _print_result(res: MakeResult) -> None:
 
 def cmd_make(args: argparse.Namespace) -> int:
     set_openai_props(args)
-    res = make(
-        args.request,
-        pipeline=args.pipeline,
-        duration=args.duration,
-        title=args.title,
-        project=args.project,
-        plan_only=args.plan_only,
-        yes=args.yes,
-        model=args.model,
-        om_root=getattr(args, "om_root", None),
-    )
+    res = make(args)
     _print_result(res)
     return 0 if res.ok else 1
 
 
 def cmd_plan(args: argparse.Namespace) -> int:
     set_openai_props(args)
-    res = make(
-        args.request,
-        pipeline=args.pipeline,
-        duration=args.duration,
-        title=args.title,
-        project=args.project,
-        plan_only=True,
-        yes=True,
-        model=args.model,
-        om_root=getattr(args, "om_root", None),
-    )
+    # plan = make --plan-only, and auto-approve gates so it stops at planning.
+    args.plan_only = True
+    args.yes = True
+    res = make(args)
     _print_result(res)
     return 0 if res.ok else 1
 
@@ -64,17 +47,8 @@ def cmd_run(args: argparse.Namespace) -> int:
     # orchestrator picks up via get_next_stage) and auto-approves outstanding
     # gates when --yes is given.
     set_openai_props(args)
-    res = make(
-        args.request,
-        pipeline=args.pipeline,
-        duration=args.duration,
-        title=args.title,
-        project=args.project,
-        plan_only=False,
-        yes=args.yes,
-        model=args.model,
-        om_root=getattr(args, "om_root", None),
-    )
+    args.plan_only = False
+    res = make(args)
     _print_result(res)
     return 0 if res.ok else 1
 
