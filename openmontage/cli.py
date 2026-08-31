@@ -343,7 +343,7 @@ def _build_parser() -> argparse.ArgumentParser:
             p.add_argument("-po", "--plan-only", action="store_true", default=False, help="stop after planning; do not generate assets or render")
         p.add_argument("-y", "--yes", action="store_true", default=False, help="auto-approve every approval gate")
         p.add_argument("-or", "--om-root", default=None, help="project root override")
-        p.add_argument("-mt", "--max-turns", type=int, default=80, help="max turns")
+        p.add_argument("-mr", "--max-turns", type=int, default=80, help="max turns")
 
     return parser
 
