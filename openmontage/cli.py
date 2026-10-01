@@ -301,6 +301,7 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("-ct", "--conn-timeout", type=int, default=60, help="")
     parser.add_argument("-rt", "--read-timeout", type=int, default=120, help="")
     parser.add_argument("-rr", "--repetition-regex", default='', help="re for repetition detection")
+    parser.add_argument("-nt", "--no-think", action='store_true', help="关闭思考模式")
     parser.set_defaults(func=lambda x: parser.print_help())
     sub = parser.add_subparsers(dest="command", help="Available commands", metavar="COMMAND")
 
