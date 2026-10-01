@@ -21,6 +21,10 @@ import json, json_repair
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Optional, Tuple
+import openai
+from ctx_compact import compact
+import logging
+from ..utils import *
 
 from .. import bridge
 from ..gates import GatePolicy, Resolution
@@ -28,6 +32,12 @@ from .. import config
 from . import openai as om_openai
 
 MAX_TOOL_RESULT_CHARS = 12000
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(asctime)s][%(name)s][%(levelname)s] %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -141,64 +151,61 @@ class Orchestrator:
             {"role": "user", "content": build_user_prompt(request, helper_hint)},
         ]
         summary = RunSummary()
+        client = openai.OpenAI(
+            base_url=openai.base_url,
+            api_key=openai.api_key,
+            default_headers={'User-Agent': openai.user_agent},
+            timeout=openai.timeout,
+        )
         for _ in range(self.args.max_turns):
             summary.turns += 1
-            res = om_openai.call_llm_retry(
-                    msgs, self.args.model,
-                    retry=self.args.retry, 
-                    temp=self.args.temp, 
-                    top_p=self.args.top_p,
-                    frequency_penalty=self.args.frequency_penalty,
-                    presence_penalty=self.args.presence_penalty,
-                    max_tokens=self.args.max_tokens,
-                    extra_body=self.args.extra_body,
+            msgs = compact(msgs, max_tokens=100_000).messages
+            logger.debug(f'ques: %s', json_dump_model(om_openai.get_msgs_text(msgs)))
+            res, toolcalls, ans = om_openai._chat_cmpl_create_retry(
+                client, msgs, self.args.model_name,
+                tool_defs, 
+                retry=self.args.retry,
+                temp=self.args.temp,
+                top_p=self.args.top_p,
+                frequency_penalty=self.args.frequency_penalty,
+                presence_penalty=self.args.presence_penalty,
+                max_tokens=self.args.max_tokens,
+                extra_body=self.args.extra_body,
             )
-            tool_blocks, errmsg = om_openai.parse_toolcall(res)
-            if errmsg or not tool_blocks:
+            msgs.append({
+                'role': 'assistant',
+                'content': ans,
+                "tool_calls": [tc.dict() for tc in toolcalls],
+            })
+            if not toolcalls:
                 # No tool call: the model stopped or is giving plain text. Treat
                 # as a soft stop unless it already finalised.
                 errmsg = errmsg or \
-                    f"No tool calls found. Please surround tool calls in [tool]...[/tool]. And if you want to stop, call `finalize`."
+                    f"No tool calls found. If you want to stop, call `finalize`."
                 msgs.append({"role": "assistant", "content": res})
                 msgs.append({"role": "user", "content": errmsg})
                 continue
-
-            print(f'toolcall: {tool_blocks}')
-            toolcall_res_list = []
-            toolcall_errmsgs = []
-            for tc in tool_blocks:
+            logger.info(f'toolcall: %s', json_dump_model(toolcalls))
+            logger.debug(f'ans: %s', json_dump_model(ans))
+            for tc in toolcalls:
                 summary.tool_calls += 1
-                # finalize ends the run immediately.
-                if tc.tool == "finalize":
+                if tc.function.name == "finalize":
                     summary.finalized = True
                     summary.finalized_message = tc.parameters.get("message", "")
                     return summary
                 result, errmsg = self._dispatch(tc.tool, tc.parameters, summary)
-                if errmsg:
-                    toolcall_errmsgs.append(errmsg)
-                    continue
+                msgs.append({
+                    "role": "tool",
+                    "tool_call_id": tc.id,
+                    "content": (errmsg if errmsg else json_dump_model(result))[:50_000],
+                })
+                logger.info(f'toolcall_res: %s', json_dump_model(msgs[-1]))
                 # After a blocked gated stage, if the host paused (no --yes),
                 # surface the pause and halt.
                 if result.get("_gate_paused"):
                     summary.finalized_message = result.get("_gate_pause_msg", "")
                     return summary
-                toolcall_res_list.append({
-                    "id": tc.id,
-                    "result": _render_result(result),
-                })
-            
-            print(f'toolcall res: {toolcall_res_list}')
-            toolcall_res_str = json.dumps(toolcall_res_list, ensure_ascii=False)
-            msgs.append({"role": "assistant", "content": res})
-            msgs.append({
-                "role": "user",
-                "content": f"[tool-result]{toolcall_res_str}[/tool-result]",
-            })
-            if toolcall_errmsgs:
-                msgs.append({
-                    "role": "user",
-                    "content": '\n'.join(toolcall_errmsgs),
-                })
+
         if not summary.finalized:
             summary.finalized_message = (
                 summary.finalized_message
