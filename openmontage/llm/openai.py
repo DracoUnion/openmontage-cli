@@ -12,7 +12,7 @@ import traceback
 from argparse import Namespace
 from typing import *
 from pydantic import BaseModel, parse_obj_as, ValidationError
-from .util import *
+from ..utils import *
 from openai.types.chat import *
 from ctx_compact import compact
 
