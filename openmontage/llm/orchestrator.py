@@ -160,7 +160,7 @@ class Orchestrator:
             msgs = compact(msgs, max_tokens=100_000).messages
             logger.debug(f'ques: %s', json_dump_model(om_openai.get_msgs_text(msgs)))
             res, toolcalls, ans = om_openai._chat_cmpl_create_retry(
-                client, msgs, self.args.model_name,
+                client, msgs, self.args.model,
                 tool_defs, 
                 retry=self.args.retry,
                 temp=self.args.temp,
@@ -187,11 +187,16 @@ class Orchestrator:
             logger.debug(f'ans: %s', json_dump_model(ans))
             for tc in toolcalls:
                 summary.tool_calls += 1
+                params = json_repair.loads(tc.function.arguments)
                 if tc.function.name == "finalize":
                     summary.finalized = True
-                    summary.finalized_message = tc.parameters.get("message", "")
+                    summary.finalized_message = params.get("message", "")
                     return summary
-                result, errmsg = self._dispatch(tc.tool, tc.parameters, summary)
+                result, errmsg = self._dispatch(
+                    tc.function.name, 
+                    params,
+                    summary
+                )
                 msgs.append({
                     "role": "tool",
                     "tool_call_id": tc.id,
