@@ -145,9 +145,7 @@ class Orchestrator:
 
     def run(self, request: str, *, helper_hint: str = "") -> RunSummary:
         tool_defs = om_openai.build_openai_tools()
-        tool_pmt = om_openai.TOOLCALL_PMT.replace('{tool_def}', json.dumps(tool_defs, ensure_ascii=False))
         msgs: list[dict[str, Any]] = [
-            {"role": "system", 'content': tool_pmt},
             {"role": "user", "content": build_user_prompt(request, helper_hint)},
         ]
         summary = RunSummary()
